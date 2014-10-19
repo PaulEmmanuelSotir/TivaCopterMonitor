@@ -11,7 +11,6 @@ using Windows.System.Threading;
 using Windows.Networking.Sockets;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Rfcomm;
-using System.Runtime.Serialization.Json;
 using TivaCopterMonitor.Model;
 
 namespace TivaCopterMonitor.DataAccessLayer
