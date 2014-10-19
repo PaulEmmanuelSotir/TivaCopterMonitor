@@ -1,8 +1,8 @@
 TivaCopter Monitor
 ------------------
 
-- FR DESCRIPTION : N/A
-- EN DESCRIPTION : N/A
+- FR DESCRIPTION : Application windows pour monitorer et contrôler un TivaCopter.
+- EN DESCRIPTION : Windows app for TivaCopter bluetooth monitoring and remote control.
 
 Fonctionalitées :
 	- N/A

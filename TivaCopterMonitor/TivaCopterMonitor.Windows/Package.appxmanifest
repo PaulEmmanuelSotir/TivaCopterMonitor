@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="TivaCopterMonitor.Windows.App">
-      <m2:VisualElements DisplayName="TivaCopterMonitor.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Windows DIY TivaCopter quadricopter monitor." ForegroundText="dark" BackgroundColor="#000000">
+      <m2:VisualElements DisplayName="TivaCopterMonitor.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Windows app for TivaCopter bluetooth monitoring and remote control." ForegroundText="dark" BackgroundColor="#000000">
         <m2:DefaultTile DefaultSize="square150x150Logo" ShortName="TivaCopter">
         </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
