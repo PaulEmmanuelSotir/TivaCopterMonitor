@@ -11,11 +11,11 @@
 		<Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 		<Converters:AddScaleConverter x:Key="ScaleConverter" IsParameterOffset="false"/>
 		<Converters:AddScaleConverter x:Key="PercentageConverter" Factor="100" IsParameterOffset="true"/>
-		<Converters:AddScaleConverter x:Key="OppositeConverter" Factor="-1" IsParameterOffset="true"/> 
+		<Converters:AddScaleConverter x:Key="OppositeConverter" Factor="-1" IsParameterOffset="true"/>
 
 		<CollectionViewSource x:Name="BluetoothDevicesSource"/>
 
-		<SolidColorBrush x:Key="ApplicationForegroundThemeBrush" Color="#59000000"/>
+		<SolidColorBrush x:Key="ApplicationForegroundThemeBrush" Color="#3F000000"/>
 
 		<Style x:Key="ContentBorderStyle" TargetType="Border">
 			<Setter Property="Background" Value="{StaticResource ApplicationForegroundThemeBrush}"/>
@@ -57,7 +57,7 @@
 					</EasingDoubleKeyFrame.EasingFunction>
 				</EasingDoubleKeyFrame>
 			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(Panel.Background).(Brush.RelativeTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="MainGrid">
+			<DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(Panel.Background).(Brush.RelativeTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="BackgroundGrid">
 				<EasingDoubleKeyFrame KeyTime="0" Value="1.1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0">
 					<EasingDoubleKeyFrame.EasingFunction>
@@ -86,27 +86,77 @@
 		</Storyboard>
 	</Page.Resources>
 
-	<Grid x:Name="MainGrid">
-		<Grid.Background>
-			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.56,0">
-				<LinearGradientBrush.RelativeTransform>
-					<CompositeTransform CenterY="0.5" CenterX="0.5"/>
-				</LinearGradientBrush.RelativeTransform>
-				<GradientStop Color="#FFFBD8A6" Offset="0.826"/>
-				<GradientStop Color="#FF081F74" Offset="0.274"/>
-				<GradientStop Color="Black"/>
-				<GradientStop Color="#FFEC6304" Offset="1"/>
-				<GradientStop Color="#FFB5DDFF" Offset="0.741"/>
-				<GradientStop Color="#FFFFC175" Offset="0.915"/>
-				<GradientStop Color="#FF030E3C" Offset="0.17"/>
-			</LinearGradientBrush>
-		</Grid.Background>
-
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="180"/>
 			<RowDefinition/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
+
+		<Grid Grid.RowSpan="3" DataContext="{Binding IMU}" RenderTransformOrigin="0.5,0.5">
+			<Grid.RenderTransform>
+				<CompositeTransform Rotation="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" TranslateY="{Binding PitchDegree, Converter={StaticResource ScaleConverter}, ConverterParameter=-10}"/>
+			</Grid.RenderTransform>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="3*"/>
+				<RowDefinition Height="2*"/>
+			</Grid.RowDefinitions>
+
+			<Grid x:Name="BackgroundGrid" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
+				<Grid.RenderTransform>
+					<CompositeTransform ScaleX="2" ScaleY="3"/>
+				</Grid.RenderTransform>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="2*"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid.Background>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<LinearGradientBrush.RelativeTransform >
+							<CompositeTransform CenterY="0.5" ScaleY="0.5" TranslateY="0.2"/>
+						</LinearGradientBrush.RelativeTransform>
+						<GradientStop Color="#FFFBD8A6" Offset="0.757"/>
+						<GradientStop Color="#FF081F74" Offset="0.274"/>
+						<GradientStop Color="Black"/>
+						<GradientStop Color="#FFEC6304" Offset="0.95"/>
+						<GradientStop Color="#FFB5DDFF" Offset="0.599"/>
+						<GradientStop Color="#FFFFC175" Offset="0.868"/>
+						<GradientStop Color="#FF030E3C" Offset="0.17"/>
+						<GradientStop Color="#FF6E5C4A" Offset="0.953"/>
+					</LinearGradientBrush>
+				</Grid.Background>
+			</Grid>
+
+			<!-- Moon -->
+			<Canvas x:Name="Moon" HorizontalAlignment="Right" Margin="0,140,120,0" VerticalAlignment="Top" Width="135.60536" Height="135.60536" RenderTransformOrigin="0.5,0.5">
+				<Canvas.RenderTransform>
+					<CompositeTransform/>
+				</Canvas.RenderTransform>
+				<Ellipse Width="135.6" Height="135.6" Fill="#07FFFFFF"/>
+				<Path Fill="#CCFFFFFF" Data="m 58.253683 0.66023 c -13.84 1.96 -24.08 6.44 -34.88 15.28 -1.52 1.24 -8.92 9.68 -9.84 11.2 -0.4 0.64 0.56 2.12 1.32 2.12 0.32 0 1.92 -1.08 3.56 -2.36 2.56 -2.08 8.76 -5.52 12.24 -6.76 5.64 -2.08 12.72 -3.08 19.8 -2.76 15.2 0.68 26.32 6.28 36.64 18.48 5.16 6.12 8.6 13.2 10.36 21.48 0.84 3.92 0.84 15.44 0 19.44 -1.56 7.44 -4.68 14.36 -9.04 20.04 -4.08 5.36 -11.8 12 -17.56 15.08 -8.48 4.6 -20.48 6.48 -30.4 4.76 -5.64 -0.96 -8.52 -1.84 -13.2 -3.92 -3.32 -1.52 -9 -5.4 -12.48 -8.56 -2.76 -2.52 -5.04 -2.12 -3.96 0.76 0.52 1.4 4.8 6.96 7.32 9.52 10.4 10.6 20.96 16.68 34.52 19.84 4.6 1.12 5.2 1.16 15 1.16 9.8 0 10.4 -0.04 15 -1.16 9.88 -2.32 15.36 -4.88 25.639997 -11.84 2.64 -1.8 10.2 -9.04 12.72 -12.16 6.44 -7.96 10.2 -15.4 12.6 -24.96 1.68 -6.8 2.2 -11.88 1.92 -20.08 -0.52 -16.88 -5.96 -30.32 -17.36 -42.92 -11.4 -12.6 -24.239997 -19.32 -41.519997 -21.72 -4.88 -0.64 -13.56 -0.64 -18.4 0.04 z"/>
+			</Canvas>
+
+			<!-- CLouds -->
+			<Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Right">
+				<Canvas Width="700" Height="300" RenderTransformOrigin="0.5,0.5">
+					<Canvas.RenderTransform>
+						<CompositeTransform Rotation="4"/>
+					</Canvas.RenderTransform>
+					<Path x:Name="Cloud1" Fill="White" Data="M420 200c0 35.344-28.656 64-64 64 v0.5h-272 c-44.188 0-80-35.813-80-80 c0-38.75 27.563-71.063 64.156-78.406  c0-0.531-0.156-1.031-0.156-1.594 c0-53.031 42.969-96 96-96 c37.438 0 69.5 21.625 85.344 52.875  c8.375-2.938 17.25-4.875 26.656-4.875 c43.844 0 79.344 35.25 79.906 79 h0.094 v0.5 C391.344 136 420 164.656 420 200z">
+						<Path.RenderTransform>
+							<CompositeTransform ScaleX="1.05" ScaleY="0.95"/>
+						</Path.RenderTransform>
+					</Path>
+					<Path x:Name="Cloud2" Canvas.Top="50" Canvas.Left="500" Fill="#FFECECEC" Data="M420 200c0 35.344-28.656 64-64 64 v0.5h-272 c-44.188 0-80-35.813-80-80 c0-38.75 27.563-71.063 64.156-78.406  c0-0.531-0.156-1.031-0.156-1.594 c0-53.031 42.969-96 96-96 c37.438 0 69.5 21.625 85.344 52.875  c8.375-2.938 17.25-4.875 26.656-4.875 c43.844 0 79.344 35.25 79.906 79 h0.094 v0.5 C391.344 136 420 164.656 420 200z">
+						<Path.RenderTransform>
+							<CompositeTransform ScaleX="0.45" ScaleY="0.35"/>
+						</Path.RenderTransform>
+					</Path>
+				</Canvas>
+			</Viewbox>
+		</Grid>
 
 		<!-- Header -->
 		<Grid x:Name="Header">
@@ -144,34 +194,6 @@
 			<Button Grid.Column="6" Content="Connect" Padding="12,4" Margin="20,0,40,0" Command="{Binding ConnectCommand}"/>
 
 		</Grid>
-
-		<!-- Moon -->
-		<Canvas x:Name="Moon" Grid.Row="1" HorizontalAlignment="Right" Margin="0,-40,120,0" VerticalAlignment="Top" Width="135.60536" Height="135.60536" RenderTransformOrigin="0.5,0.5">
-			<Canvas.RenderTransform>
-				<CompositeTransform/>
-			</Canvas.RenderTransform>
-			<Ellipse Width="135.6" Height="135.6" Fill="#07FFFFFF"/>
-			<Path Fill="#CCFFFFFF" Data="m 58.253683 0.66023 c -13.84 1.96 -24.08 6.44 -34.88 15.28 -1.52 1.24 -8.92 9.68 -9.84 11.2 -0.4 0.64 0.56 2.12 1.32 2.12 0.32 0 1.92 -1.08 3.56 -2.36 2.56 -2.08 8.76 -5.52 12.24 -6.76 5.64 -2.08 12.72 -3.08 19.8 -2.76 15.2 0.68 26.32 6.28 36.64 18.48 5.16 6.12 8.6 13.2 10.36 21.48 0.84 3.92 0.84 15.44 0 19.44 -1.56 7.44 -4.68 14.36 -9.04 20.04 -4.08 5.36 -11.8 12 -17.56 15.08 -8.48 4.6 -20.48 6.48 -30.4 4.76 -5.64 -0.96 -8.52 -1.84 -13.2 -3.92 -3.32 -1.52 -9 -5.4 -12.48 -8.56 -2.76 -2.52 -5.04 -2.12 -3.96 0.76 0.52 1.4 4.8 6.96 7.32 9.52 10.4 10.6 20.96 16.68 34.52 19.84 4.6 1.12 5.2 1.16 15 1.16 9.8 0 10.4 -0.04 15 -1.16 9.88 -2.32 15.36 -4.88 25.639997 -11.84 2.64 -1.8 10.2 -9.04 12.72 -12.16 6.44 -7.96 10.2 -15.4 12.6 -24.96 1.68 -6.8 2.2 -11.88 1.92 -20.08 -0.52 -16.88 -5.96 -30.32 -17.36 -42.92 -11.4 -12.6 -24.239997 -19.32 -41.519997 -21.72 -4.88 -0.64 -13.56 -0.64 -18.4 0.04 z"/>
-		</Canvas>
-
-		<!-- CLouds -->
-		<Viewbox Grid.Row="2" Stretch="Uniform" HorizontalAlignment="Right">
-			<Canvas Width="700" Height="300" RenderTransformOrigin="0.5,0.5">
-				<Canvas.RenderTransform>
-					<CompositeTransform Rotation="4"/>
-				</Canvas.RenderTransform>
-				<Path x:Name="Cloud1" Fill="White" Data="M420 200c0 35.344-28.656 64-64 64 v0.5h-272 c-44.188 0-80-35.813-80-80 c0-38.75 27.563-71.063 64.156-78.406  c0-0.531-0.156-1.031-0.156-1.594 c0-53.031 42.969-96 96-96 c37.438 0 69.5 21.625 85.344 52.875  c8.375-2.938 17.25-4.875 26.656-4.875 c43.844 0 79.344 35.25 79.906 79 h0.094 v0.5 C391.344 136 420 164.656 420 200z">
-					<Path.RenderTransform>
-						<CompositeTransform ScaleX="1.05" ScaleY="0.95"/>
-					</Path.RenderTransform>
-				</Path>
-				<Path x:Name="Cloud2" Canvas.Top="50" Canvas.Left="500" Fill="#FFECECEC" Data="M420 200c0 35.344-28.656 64-64 64 v0.5h-272 c-44.188 0-80-35.813-80-80 c0-38.75 27.563-71.063 64.156-78.406  c0-0.531-0.156-1.031-0.156-1.594 c0-53.031 42.969-96 96-96 c37.438 0 69.5 21.625 85.344 52.875  c8.375-2.938 17.25-4.875 26.656-4.875 c43.844 0 79.344 35.25 79.906 79 h0.094 v0.5 C391.344 136 420 164.656 420 200z">
-					<Path.RenderTransform>
-						<CompositeTransform ScaleX="0.45" ScaleY="0.35"/>
-					</Path.RenderTransform>
-				</Path>
-			</Canvas>
-		</Viewbox>
 
 
 		<ScrollViewer Grid.Row="1" Grid.RowSpan="2" VerticalScrollMode="Disabled" HorizontalScrollMode="Auto" ZoomMode="Disabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
@@ -385,7 +407,7 @@
 						<!-- 3D view -->
 						<Viewbox Grid.Row="6" Width="150">
 							<Viewbox.Projection>
-								<PlaneProjection RotationX="{Binding PitchDegree, Converter={StaticResource OppositeConverter}, ConverterParameter=-90}" RotationZ="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" RotationY="{Binding YawDegree, Converter={StaticResource OppositeConverter}}"/>
+								<PlaneProjection RotationX="{Binding PitchDegree, Converter={StaticResource OppositeConverter}, ConverterParameter=-75}" RotationZ="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" RotationY="{Binding YawDegree, Converter={StaticResource OppositeConverter}}"/>
 							</Viewbox.Projection>
 							<Canvas Width="600" Height="600" RenderTransformOrigin="0.5,0.5">
 								<Rectangle Canvas.Left="290" Canvas.Top="45" Width="20" Height="110" Fill="White"/>
