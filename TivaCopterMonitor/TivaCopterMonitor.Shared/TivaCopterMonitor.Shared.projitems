@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\AddScaleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\BluetoothCmdLineInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\JSONConverters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\TivaCopterControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\JSONDataSources.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\TivaCopterHardware.cs" />
   </ItemGroup>

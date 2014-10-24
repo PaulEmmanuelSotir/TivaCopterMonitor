@@ -126,19 +126,19 @@ namespace TivaCopterMonitor.DataAccessLayer
 				// Create a standard networking socket and connect to the target
 				_socket = new StreamSocket();
 
-			/*	var watcher = DeviceInformation.CreateWatcher(RfcommDeviceService.GetDeviceSelector(_service.ServiceId));
-				watcher.Removed += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>((deviceWatcher, target) =>
-				{
-					Disconnect();
-				});
-				watcher.Added += new TypedEventHandler<DeviceWatcher, DeviceInformation>((deviceWatcher, target) =>
-				{
+				/*	var watcher = DeviceInformation.CreateWatcher(RfcommDeviceService.GetDeviceSelector(_service.ServiceId));
+					watcher.Removed += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>((deviceWatcher, target) =>
+					{
+						Disconnect();
+					});
+					watcher.Added += new TypedEventHandler<DeviceWatcher, DeviceInformation>((deviceWatcher, target) =>
+					{
 
-				});
-				watcher.Updated += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>((deviceWatcher, target) => { });
-				watcher.Stopped += new TypedEventHandler<DeviceWatcher, object>((d, o) => { });
-				watcher.EnumerationCompleted += new TypedEventHandler<DeviceWatcher, object>((d, o) => { });
-				watcher.Start(); */
+					});
+					watcher.Updated += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>((deviceWatcher, target) => { });
+					watcher.Stopped += new TypedEventHandler<DeviceWatcher, object>((d, o) => { });
+					watcher.EnumerationCompleted += new TypedEventHandler<DeviceWatcher, object>((d, o) => { });
+					watcher.Start(); */
 
 				_connectAction = _socket.ConnectAsync(_service.ConnectionHostName, _service.ConnectionServiceName, SocketProtectionLevel.BluetoothEncryptionAllowNullAuthentication);
 
@@ -281,13 +281,18 @@ namespace TivaCopterMonitor.DataAccessLayer
 			}
 		}
 
-		/*public async Task Send(JSONRemoteControl rmctrl)
+		public async Task Send(TivaCopterControl ctrl)
 		{
-			if (_state == BluetoothConnectionState.Connected && _JSONStarted)
+			if (_state == BluetoothConnectionState.Connected && _JSONCommunicationStarted)
 			{
-				//TODO: serialize rmctrl
+				try
+				{
+					var SerializedData = await JsonConvert.SerializeObjectAsync(ctrl);
+					await Send(SerializedData);
+				}
+				catch (Newtonsoft.Json.JsonSerializationException) { }
 			}
-		}*/
+		}
 
 		private IAsyncAction _connectAction;
 		private RfcommDeviceService _service;
