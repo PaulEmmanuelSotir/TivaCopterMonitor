@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Windows.UI.Core;
@@ -11,26 +12,29 @@ using Windows.System.Threading;
 using Windows.Networking.Sockets;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Rfcomm;
+using Windows.ApplicationModel.Core;
+using Newtonsoft.Json;
 using TivaCopterMonitor.Model;
 
 namespace TivaCopterMonitor.DataAccessLayer
 {
 	public class BluetoothCmdLineInterface : Common.PropertyChangedBase, IDisposable
 	{
-		public BluetoothCmdLineInterface()
+		public BluetoothCmdLineInterface(TaskScheduler ReadingTaskScheduler)
 		{
 			PairedDevices = new ObservableCollection<DeviceInformation>();
 			_stringBuilder = new StringBuilder(256);
 			_cmdLineStringBuilder = new StringBuilder(64);
 			_state = BluetoothConnectionState.Disconnected;
+			_readingTaskScheduler = ReadingTaskScheduler;
 		}
 
 		#region Events
 
-		public delegate void BluetoothExDelegate(BluetoothCmdLineInterface sender, Exception ex);
-
-		public event BluetoothExDelegate ExceptionOccured;
-		public event TypedEventHandler<BluetoothCmdLineInterface, IJSONDataSource> JSONObjectReceived;
+		public event TypedEventHandler<BluetoothCmdLineInterface, JSONDataSource> JSONObjectReceived;
+		public event EventHandler StateChanged;
+		public event EventHandler CmdLineBufferChanged;
+		public event EventHandler BufferChanged;
 
 		#endregion
 
@@ -45,7 +49,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 		public BluetoothConnectionState State
 		{
 			get { return _state; }
-			private set { _state = value; OnPropertyChanged(); }
+			private set { _state = value; if (StateChanged != null) StateChanged(this, null); }
 		}
 
 		///<summary>
@@ -101,10 +105,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 				State = lastState;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				Disconnect();
-				ExceptionOccured(this, ex);
 			}
 		}
 
@@ -123,6 +126,20 @@ namespace TivaCopterMonitor.DataAccessLayer
 				// Create a standard networking socket and connect to the target
 				_socket = new StreamSocket();
 
+			/*	var watcher = DeviceInformation.CreateWatcher(RfcommDeviceService.GetDeviceSelector(_service.ServiceId));
+				watcher.Removed += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>((deviceWatcher, target) =>
+				{
+					Disconnect();
+				});
+				watcher.Added += new TypedEventHandler<DeviceWatcher, DeviceInformation>((deviceWatcher, target) =>
+				{
+
+				});
+				watcher.Updated += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>((deviceWatcher, target) => { });
+				watcher.Stopped += new TypedEventHandler<DeviceWatcher, object>((d, o) => { });
+				watcher.EnumerationCompleted += new TypedEventHandler<DeviceWatcher, object>((d, o) => { });
+				watcher.Start(); */
+
 				_connectAction = _socket.ConnectAsync(_service.ConnectionHostName, _service.ConnectionServiceName, SocketProtectionLevel.BluetoothEncryptionAllowNullAuthentication);
 
 				await _connectAction.AsTask().ContinueWith(async (task) =>
@@ -134,46 +151,68 @@ namespace TivaCopterMonitor.DataAccessLayer
 						_reader.InputStreamOptions = InputStreamOptions.Partial;
 						_reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
-						// Update State on UI thread
-						await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-						{ State = BluetoothConnectionState.Connected; });
+						// String builder storing the last received JSON string.
+						StringBuilder _JsonStringBluilder = new StringBuilder();
+
+						State = BluetoothConnectionState.Connected;
 
 						// Receiving loop
-						while (true)
+						while (_reader != null)
 						{
 							var size = await _reader.LoadAsync(sizeof(byte));
 
 							if (size != sizeof(byte))
+							{
 								// The underlying socket was closed before we were able to read the whole data 
-								throw new Exception("Bluetooth connection lost.");
+								Disconnect();
+								break;
+							}
 
-							char c = (char)_reader.ReadByte();
+							var c = (char)_reader.ReadByte();
 							_stringBuilder.Append(c);
 
-							// TODO: correct bug: "start" don't append in _cmdLineStringBuilder
-							// If the received data isn't JSON objects, add it to _cmdLineStringBuilder
-							if (!_JSONCommunicationStarted)
-								_cmdLineStringBuilder.Append(c);
-
-							// Notify property changed on UI thread
-							await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+							if (_JSONCommunicationStarted)
 							{
-								OnPropertyChanged("Buffer");
-								if (!_JSONCommunicationStarted)
-									OnPropertyChanged("CmdLineBuffer");
-							});
+								if (c == '\n')
+								{
+									try
+									{
+										var DeserializedData = JsonConvert.DeserializeObject<JSONDataSource>(_JsonStringBluilder.ToString(), new JsonDataSourceConverter());
+										if (DeserializedData != null && JSONObjectReceived != null)
+											JSONObjectReceived(this, DeserializedData);
+									}
+									catch (Newtonsoft.Json.JsonReaderException) { }
+									finally
+									{
+										_JsonStringBluilder.Clear();
+									}
+								}
+								else
+									_JsonStringBluilder.Append(c);
+							}
+							else
+							{
+								// TODO: correct bug: "start" don't append in _cmdLineStringBuilder (add a boolean 'FirstJSONObjReceived' ?)
+								// If the received data isn't JSON objects, add it to _cmdLineStringBuilder
+								_cmdLineStringBuilder.Append(c);
+							}
 
+							// Notify buffers changed
+							if (BufferChanged != null)
+								BufferChanged(this, null);
+							if (!_JSONCommunicationStarted && CmdLineBufferChanged != null)
+								CmdLineBufferChanged(this, null);
 						}
-					});
+					}, _readingTaskScheduler);
 			}
 			catch (TaskCanceledException)
 			{
 				Disconnect();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				Disconnect();
-				ExceptionOccured(this, ex);
+				throw;
 			}
 		}
 
@@ -185,6 +224,10 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		public void Disconnect()
 		{
+			/*if (_JSONCommunicationStarted)
+				// TODO: savoir si utiliser 'runSynchronously' est la bonne solution
+				Stop().RunSynchronously();*/
+
 			if (_reader != null)
 			{
 				_reader.DetachStream();
@@ -256,6 +299,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 		private StringBuilder _stringBuilder;
 		private StringBuilder _cmdLineStringBuilder;
 		private BluetoothConnectionState _state;
+		private TaskScheduler _readingTaskScheduler;
 
 		#endregion
 
@@ -263,7 +307,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		public async Task EnableDatasource(Type dsType)
 		{
-			if (dsType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IJSONDataSource)))
+			if (dsType.GetTypeInfo().IsSubclassOf(typeof(JSONDataSource)))
 			{
 				await Send(Command.enable, dsType.Name);
 			}
@@ -271,7 +315,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		public async Task DisableDatasource(Type dsType)
 		{
-			if (dsType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IJSONDataSource)))
+			if (dsType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(JSONDataSource)))
 			{
 				await Send(Command.disable, dsType.Name);
 			}

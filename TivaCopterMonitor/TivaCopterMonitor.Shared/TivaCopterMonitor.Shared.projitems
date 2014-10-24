@@ -18,9 +18,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\PropertyChangedBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\ScaleConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\NumberToPercentageConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\AddScaleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\BluetoothCmdLineInterface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\JSONConverters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\JSONDataSources.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\TivaCopterHardware.cs" />
   </ItemGroup>

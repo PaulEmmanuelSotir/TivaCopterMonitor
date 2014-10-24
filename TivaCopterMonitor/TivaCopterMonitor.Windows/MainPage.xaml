@@ -9,7 +9,9 @@
 	mc:Ignorable="d" Loaded="Page_Loaded">
 	<Page.Resources>
 		<Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-		<Converters:ScaleConverter x:Key="ScaleConverter"/>
+		<Converters:AddScaleConverter x:Key="ScaleConverter" IsParameterOffset="false"/>
+		<Converters:AddScaleConverter x:Key="PercentageConverter" Factor="100" IsParameterOffset="true"/>
+		<Converters:AddScaleConverter x:Key="OppositeConverter" Factor="-1" IsParameterOffset="true"/> 
 
 		<CollectionViewSource x:Name="BluetoothDevicesSource"/>
 
@@ -233,13 +235,13 @@
 
 								<Canvas Width="250" Height="200" RenderTransformOrigin="0.5,0.5" Canvas.ZIndex="-1">
 									<Canvas.RenderTransform>
-										<CompositeTransform Rotation="{Binding Roll}" ScaleX="1.25" ScaleY="1.4"/>
+										<CompositeTransform Rotation="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" ScaleX="1.25" ScaleY="1.4"/>
 									</Canvas.RenderTransform>
 
 									<!-- Ground -->
 									<Rectangle Width="400" Height="400" Canvas.Top="100" Canvas.Left="-75" RenderTransformOrigin="0.5,0.5">
 										<Rectangle.RenderTransform>
-											<CompositeTransform TranslateY="{Binding Pitch, Converter={StaticResource ScaleConverter}, ConverterParameter=1.5}"/>
+											<CompositeTransform TranslateY="{Binding PitchDegree, Converter={StaticResource ScaleConverter}, ConverterParameter=-1.5}"/>
 										</Rectangle.RenderTransform>
 										<Rectangle.Fill>
 											<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -250,7 +252,7 @@
 									</Rectangle>
 									<Rectangle Canvas.Top="100"  Canvas.Left="-75" Width="400" Height="1" Fill="#B2F5F5F5">
 										<Rectangle.RenderTransform>
-											<CompositeTransform TranslateY="{Binding Pitch, Converter={StaticResource ScaleConverter}, ConverterParameter=1.5}"/>
+											<CompositeTransform TranslateY="{Binding PitchDegree, Converter={StaticResource ScaleConverter}, ConverterParameter=-1.5}"/>
 										</Rectangle.RenderTransform>
 									</Rectangle>
 
@@ -334,7 +336,10 @@
 
 						<!-- Yaw -->
 						<Viewbox Grid.Row="4" Width="200" Margin="20,0">
-							<Canvas Width="600" Height="600">
+							<Canvas Width="600" Height="600" RenderTransformOrigin="0.5,0.5">
+								<Canvas.RenderTransform>
+									<CompositeTransform Rotation="{Binding YawDegree, Converter={StaticResource OppositeConverter}}"/>
+								</Canvas.RenderTransform>
 								<Ellipse Canvas.Left="0" Canvas.Top="0" Width="600" Height="600" StrokeThickness="5" Stroke="#FFFFFFFF"/>
 								<Ellipse Canvas.Left="5" Canvas.Top="5" Width="590" Height="590" StrokeThickness="5" Stroke="#FFD4D4D4"/>
 								<Ellipse Canvas.Left="10" Canvas.Top="10" Width="580" Height="580" StrokeThickness="5" Stroke="#FFFFFFFF"/>
@@ -377,41 +382,18 @@
 
 						<TextBlock Grid.Row="5" Text="3D View" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,10"/>
 
-						<!-- TODO faire de la vraie 3D -->
-						<Rectangle Grid.Row="6" Height="50" Width="50">
-							<Rectangle.Projection>
-								<PlaneProjection RotationX="{Binding Pitch}" RotationZ="{Binding Yaw}" RotationY="{Binding Roll}"/>
-							</Rectangle.Projection>
-							<Rectangle.Fill>
-								<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-									<GradientStop Offset="0" Color="#FF4D4D4D"/>
-									<GradientStop Color="#FF111111" Offset="1"/>
-								</LinearGradientBrush>
-							</Rectangle.Fill>
-						</Rectangle>
-					</Grid>
-					<!--<StackPanel	DataContext="{Binding IMU}">
-						
-					</StackPanel>-->
-				</Border>
-
-				<!-- PID & Motors -->
-				<Border DataContext="{Binding PID}" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource ContentBorderStyle}">
-					<Grid>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="*"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-						</Grid.RowDefinitions>
-						<TextBlock Text="Motors and stabilization" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,20"/>
-
-						<TextBlock Grid.Row="1" Text="Motors throttle" Style="{StaticResource TitleTextBlockStyle}"/>
-
-						<!-- Motors throttle -->
-						<Viewbox Grid.Row="2" Margin="50,10">
-							<Canvas Width="600" Height="600" >
+						<!-- 3D view -->
+						<Viewbox Grid.Row="6" Width="150">
+							<Viewbox.Projection>
+								<PlaneProjection RotationX="{Binding PitchDegree, Converter={StaticResource OppositeConverter}, ConverterParameter=-90}" RotationZ="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" RotationY="{Binding YawDegree, Converter={StaticResource OppositeConverter}}"/>
+							</Viewbox.Projection>
+							<Canvas Width="600" Height="600" RenderTransformOrigin="0.5,0.5">
+								<Rectangle Canvas.Left="290" Canvas.Top="45" Width="20" Height="110" Fill="White"/>
+								<Polygon Canvas.Left="275" Canvas.Top="55" Points="0,0 40,25, 0,50" Fill="White">
+									<Polygon.RenderTransform>
+										<CompositeTransform Rotation="-90"/>
+									</Polygon.RenderTransform>
+								</Polygon>
 								<Rectangle Canvas.Left="269.98" Canvas.Top="235.4" Width="53" Height="226" Fill="#FFFFFFFF">
 									<Rectangle.RenderTransform>
 										<CompositeTransform Rotation="135"/>
@@ -432,61 +414,122 @@
 										<CompositeTransform Rotation="-45"/>
 									</Rectangle.RenderTransform>
 								</Rectangle>
+
 								<Rectangle Canvas.Left="209" Canvas.Top="154" Width="182" Height="292" RadiusY="15" RadiusX="15" Fill="#FF333333"/>
-								<Ellipse Canvas.Left="0" Canvas.Top="0" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFFFFFFF" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-								<Ellipse Canvas.Left="18" Canvas.Top="18" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
-									<Ellipse.RenderTransform>
-										<CompositeTransform ScaleY="0.6" ScaleX="0.6"/>
-									</Ellipse.RenderTransform>
-								</Ellipse>
-								<TextBlock Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" Width="155" Canvas.Left="-195" TextAlignment="Right" Canvas.Top="27.62" Height="64.266670">
-								<Run Text="40"/>
-								<Run Text="%"/>
-								</TextBlock>
 
-								<Ellipse Canvas.Left="480.5" Canvas.Top="0" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFFFFFFF" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-								<Ellipse Canvas.Left="498.5" Canvas.Top="18" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
-									<Ellipse.RenderTransform>
-										<CompositeTransform ScaleY="0.8" ScaleX="0.8"/>
-									</Ellipse.RenderTransform>
-								</Ellipse>
-								<TextBlock Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" Width="155" Canvas.Left="640" Canvas.Top="27.62" Height="64.266670">
-								<Run Text="80"/>
-								<Run Text="%"/>
-								</TextBlock>
-
-								<Ellipse Canvas.Left="0" Canvas.Top="480.5" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFCD1D0B" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-								<Ellipse Canvas.Left="18" Canvas.Top="498.5" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
-									<Ellipse.RenderTransform>
-										<CompositeTransform ScaleY="0.6" ScaleX="0.6"/>
-									</Ellipse.RenderTransform>
-								</Ellipse>
-								<TextBlock Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" Width="155" Canvas.Left="-195" TextAlignment="Right" Canvas.Top="508.117" Height="64.266670">
-								<Run Text="40"/>
-								<Run Text="%"/>
-								</TextBlock>
-
-								<Ellipse Canvas.Left="480.5" Canvas.Top="480.5" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFCD1D0B" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-								<Ellipse Canvas.Left="498.5" Canvas.Top="498.5" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
-									<Ellipse.RenderTransform>
-										<CompositeTransform ScaleY="0.8" ScaleX="0.8"/>
-									</Ellipse.RenderTransform>
-								</Ellipse>
-								<TextBlock Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" Width="155" Canvas.Left="640" Canvas.Top="508.117" Height="64.266670">
-								<Run Text="80"/>
-								<Run Text="%"/>
-								</TextBlock>
+								<Ellipse Canvas.Left="48" Canvas.Top="48" Width="83.5" Height="83.5" Fill="White"/>
+								<Ellipse Canvas.Left="468.5" Canvas.Top="48" Width="83.5" Height="83.5" Fill="White"/>
+								<Ellipse Canvas.Left="48" Canvas.Top="468.5" Width="83.5" Height="83.5" Fill="#FFCD1D0B"/>
+								<Ellipse Canvas.Left="468.5" Canvas.Top="468.5" Width="83.5" Height="83.5" Fill="#FFCD1D0B"/>
 							</Canvas>
+						</Viewbox>
+					</Grid>
+				</Border>
+
+				<!-- PID & Motors -->
+				<Border DataContext="{Binding PID}" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource ContentBorderStyle}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<TextBlock Text="Motors and stabilization" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,20"/>
+
+						<TextBlock Grid.Row="1" Text="Motors throttle" Style="{StaticResource TitleTextBlockStyle}"/>
+
+						<!-- Motors throttle -->
+						<Viewbox Grid.Row="2" Margin="0,10">
+							<Grid Width="1200" Height="600">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="300"/>
+									<ColumnDefinition Width="600"/>
+									<ColumnDefinition Width="300"/>
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition/>
+									<RowDefinition/>
+								</Grid.RowDefinitions>
+								<TextBlock Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" Margin="0,27.62,30,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+									<Run Text="{Binding Motor4, Converter={StaticResource PercentageConverter}}"/>
+									<Run Text="%"/>
+								</TextBlock>
+								<TextBlock Grid.Row="1" Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,27.62">
+									<Run Text="{Binding Motor3, Converter={StaticResource PercentageConverter}}"/>
+									<Run Text="%"/>
+								</TextBlock>
+								<TextBlock Grid.Column="2" Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" Canvas.Left="640" Canvas.Top="27.62" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,27.62,0,0">
+									<Run Text="{Binding Motor1, Converter={StaticResource PercentageConverter}}"/>
+									<Run Text="%"/>
+								</TextBlock>
+								<TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource GraduationTextBlockStyle}" Foreground="Gold" FontSize="48" FontWeight="Bold" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,27.62">
+										<Run Text="{Binding Motor2, Converter={StaticResource PercentageConverter}}"/>
+										<Run Text="%"/>
+								</TextBlock>
+
+								<Canvas Grid.Column="1" Grid.RowSpan="2">
+									<Rectangle Canvas.Left="269.98" Canvas.Top="235.4" Width="53" Height="226" Fill="#FFFFFFFF">
+										<Rectangle.RenderTransform>
+											<CompositeTransform Rotation="135"/>
+										</Rectangle.RenderTransform>
+									</Rectangle>
+									<Rectangle Canvas.Left="361.23" Canvas.Top="275.4" Width="53" Height="226" Fill="#FFFFFFFF">
+										<Rectangle.RenderTransform>
+											<CompositeTransform Rotation="-135"/>
+										</Rectangle.RenderTransform>
+									</Rectangle>
+									<Rectangle Canvas.Left="225.02" Canvas.Top="336.4" Width="53" Height="214" Fill="#FFCD1D0B">
+										<Rectangle.RenderTransform>
+											<CompositeTransform Rotation="45"/>
+										</Rectangle.RenderTransform>
+									</Rectangle>
+									<Rectangle Canvas.Left="333" Canvas.Top="370" Width="53" Height="214" Fill="#FFCD1D0B">
+										<Rectangle.RenderTransform>
+											<CompositeTransform Rotation="-45"/>
+										</Rectangle.RenderTransform>
+									</Rectangle>
+									<Rectangle Canvas.Left="209" Canvas.Top="154" Width="182" Height="292" RadiusY="15" RadiusX="15" Fill="#FF333333"/>
+									<Ellipse Canvas.Left="0" Canvas.Top="0" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFFFFFFF" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+									<Ellipse Canvas.Left="18" Canvas.Top="18" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<CompositeTransform ScaleY="{Binding Motor4}" ScaleX="{Binding Motor4}"/>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+
+									<Ellipse Canvas.Left="480.5" Canvas.Top="0" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFFFFFFF" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+									<Ellipse Canvas.Left="498.5" Canvas.Top="18" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<CompositeTransform ScaleY="{Binding Motor1}" ScaleX="{Binding Motor1}"/>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+
+									<Ellipse Canvas.Left="0" Canvas.Top="480.5" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFCD1D0B" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+									<Ellipse Canvas.Left="18" Canvas.Top="498.5" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<CompositeTransform ScaleY="{Binding Motor3}" ScaleX="{Binding Motor3}"/>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+
+									<Ellipse Canvas.Left="480.5" Canvas.Top="480.5" Width="119.5" Height="119.5" StrokeThickness="18" Stroke="#FFCD1D0B" StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+									<Ellipse Canvas.Left="498.5" Canvas.Top="498.5" Width="83.5" Height="83.5" Fill="Gold" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<CompositeTransform ScaleY="{Binding Motor2}" ScaleX="{Binding Motor2}"/>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+								</Canvas>
+							</Grid>
 						</Viewbox>
 
 						<TextBlock Grid.Row="3" Text="Stabilization PID" Style="{StaticResource TitleTextBlockStyle}"/>
 						<TextBlock Grid.Row="4" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
 							<Run Text="YawOut = "/>
-							<Run Text="{Binding YawOut}"/>
+							<Run Text="{Binding YawOut, FallbackValue=0.0}"/>
 							<Run Text="	PitchOut = "/>
-							<Run Text="{Binding PitchOut}"/>
+							<Run Text="{Binding PitchOut, FallbackValue=0.0}"/>
 							<Run Text="	RollOut = "/>
-							<Run Text="{Binding RollOut}"/>
+							<Run Text="{Binding RollOut, FallbackValue=0.0}"/>
 						</TextBlock>
 					</Grid>
 				</Border>
@@ -504,11 +547,11 @@
 							<TextBlock Text="Accelerometer" Style="{StaticResource TitleTextBlockStyle}"/>
 							<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
 							<Run Text="ax = "/>
-							<Run Text="{Binding ax}"/>
+							<Run Text="{Binding ax, FallbackValue=0.0}"/>
 							<Run Text="	ay = "/>
-							<Run Text="{Binding ay}"/>
+							<Run Text="{Binding ay, FallbackValue=0.0}"/>
 							<Run Text="	az = "/>
-							<Run Text="{Binding az}"/>
+							<Run Text="{Binding az, FallbackValue=0.0}"/>
 							</TextBlock>
 						</Grid>
 
@@ -520,11 +563,11 @@
 							<TextBlock Text="Gyroscope" Style="{StaticResource TitleTextBlockStyle}"/>
 							<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
 							<Run Text="gx = "/>
-							<Run Text="{Binding gx}"/>
+							<Run Text="{Binding gx, FallbackValue=0.0}"/>
 							<Run Text="	gy = "/>
-							<Run Text="{Binding gy}"/>
+							<Run Text="{Binding gy, FallbackValue=0.0}"/>
 							<Run Text="	gz = "/>
-							<Run Text="{Binding gz}"/>
+							<Run Text="{Binding gz, FallbackValue=0.0}"/>
 							</TextBlock>
 						</Grid>
 
@@ -536,11 +579,11 @@
 							<TextBlock Text="Magnetometer" Style="{StaticResource TitleTextBlockStyle}"/>
 							<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
 							<Run Text="mx = "/>
-							<Run Text="{Binding mx}"/>
+							<Run Text="{Binding mx, FallbackValue=0.0}"/>
 							<Run Text="	my = "/>
-							<Run Text="{Binding my}"/>
+							<Run Text="{Binding my, FallbackValue=0.0}"/>
 							<Run Text="	mz = "/>
-							<Run Text="{Binding mz}"/>
+							<Run Text="{Binding mz, FallbackValue=0.0}"/>
 							</TextBlock>
 						</Grid>
 					</StackPanel>
@@ -551,39 +594,39 @@
 					<StackPanel>
 						<TextBlock Text="Radio" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,20"/>
 
-						<Border Padding="10,5" Margin="0,5" BorderBrush="White" BorderThickness="2">
+						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
-								<TextBlock Text="OUTPUT 0" Style="{StaticResource TitleTextBlockStyle}" Foreground="White"/>
-								<Ellipse Visibility="{Binding ch0, Converter={StaticResource BooleanToVisibilityConverter}}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Green"/>
-								<Ellipse Visibility="{Binding ch0, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Red"/>
+								<TextBlock Text="OUTPUT 0" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+								<Rectangle Visibility="{Binding ch0, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding ch0, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
-						<Border Padding="10,5" Margin="0,5" BorderBrush="White" BorderThickness="2">
+						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
-								<TextBlock Text="OUTPUT 1" Style="{StaticResource TitleTextBlockStyle}" Foreground="White"/>
-								<Ellipse Visibility="{Binding ch1, Converter={StaticResource BooleanToVisibilityConverter}}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Green"/>
-								<Ellipse Visibility="{Binding ch1, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Red"/>
+								<TextBlock Text="OUTPUT 1" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+								<Rectangle Visibility="{Binding ch1, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding ch1, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
-						<Border Padding="10,5" Margin="0,5" BorderBrush="White" BorderThickness="2">
+						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
-								<TextBlock Text="OUTPUT 2" Style="{StaticResource TitleTextBlockStyle}" Foreground="White"/>
-								<Ellipse Visibility="{Binding ch2, Converter={StaticResource BooleanToVisibilityConverter}}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Green"/>
-								<Ellipse Visibility="{Binding ch2, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Red"/>
+								<TextBlock Text="OUTPUT 2" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+								<Rectangle Visibility="{Binding ch2, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding ch2, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
-						<Border Padding="10,5" Margin="0,5" BorderBrush="White" BorderThickness="2">
+						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
-								<TextBlock Text="OUTPUT 3" Style="{StaticResource TitleTextBlockStyle}" Foreground="White"/>
-								<Ellipse Visibility="{Binding ch3, Converter={StaticResource BooleanToVisibilityConverter}}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Green"/>
-								<Ellipse Visibility="{Binding ch3, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=1}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Red"/>
+								<TextBlock Text="OUTPUT 3" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+								<Rectangle Visibility="{Binding ch3, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding ch3, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
-						<Border Padding="10,5" Margin="0,5" BorderBrush="White" BorderThickness="2">
+						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
-								<TextBlock Text="OUTPUT 4" Style="{StaticResource TitleTextBlockStyle}" Foreground="White"/>
-								<Ellipse Visibility="{Binding ch4, Converter={StaticResource BooleanToVisibilityConverter}}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Green"/>
-								<Ellipse Visibility="{Binding ch4, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=1}" Width="25" Height="25" HorizontalAlignment="Right" Fill="Red"/>
+								<TextBlock Text="OUTPUT 4" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+								<Rectangle Visibility="{Binding ch4, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding ch4, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
 					</StackPanel>
