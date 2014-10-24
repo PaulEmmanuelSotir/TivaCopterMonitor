@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TivaCopterMonitor
 {
-	public sealed partial class MainPage : Page
+	public sealed partial class MainPage : Page, IDisposable
 	{
 		public MainPage()
 		{
@@ -46,6 +46,16 @@ namespace TivaCopterMonitor
 
 		private ViewModel.TivaCopterViewModel _tivaCopterVM;
 		private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+		
+		#region IDisposable
+
+		public void Dispose()
+		{
+			_tivaCopterVM.Dispose();
+			GC.SuppressFinalize(this);
+		}
+
+		#endregion
 
 	}
 }

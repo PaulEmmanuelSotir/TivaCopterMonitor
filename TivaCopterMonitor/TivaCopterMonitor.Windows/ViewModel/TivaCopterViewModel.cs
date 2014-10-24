@@ -13,7 +13,7 @@ using Windows.Networking.Sockets;
 
 namespace TivaCopterMonitor.ViewModel
 {
-	public class TivaCopterViewModel : Common.PropertyChangedBase
+	public class TivaCopterViewModel : Common.PropertyChangedBase, IDisposable
 	{
 		public TivaCopterViewModel()
 		{
@@ -86,6 +86,36 @@ namespace TivaCopterMonitor.ViewModel
 			else
 				SelectedBluetoothDevice = null;
 		}
+
+
+		#region IDisposable
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposed)
+			{
+				if (disposing)
+				{
+					// Dispose managed resources.
+					_bluetoothConnection.Dispose();
+				}
+
+				// Call the appropriate methods to clean upunmanaged resources here. 
+				// ...
+
+				disposed = true;
+			}
+		}
+
+		private bool disposed = false;
+
+		#endregion
 
 		#region Properties
 

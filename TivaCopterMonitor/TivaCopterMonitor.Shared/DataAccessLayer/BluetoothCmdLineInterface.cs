@@ -250,12 +250,10 @@ namespace TivaCopterMonitor.DataAccessLayer
 				_service = null;
 			}
 			_JSONCommunicationStarted = false;
-			State = BluetoothConnectionState.Disconnected;
-		}
+			_connectAction = null;
 
-		public void Dispose()
-		{
-			Disconnect();
+
+			State = BluetoothConnectionState.Disconnected;
 		}
 
 		private async Task Send(String str)
@@ -394,6 +392,35 @@ namespace TivaCopterMonitor.DataAccessLayer
 		}
 
 		private bool _JSONCommunicationStarted;
+
+		#endregion
+
+		#region IDisposable
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposed)
+			{
+				if (disposing)
+				{
+					// Dispose managed resources.
+					Disconnect();
+				}
+
+				// Call the appropriate methods to clean upunmanaged resources here. 
+				// ...
+
+				disposed = true;
+			}
+		}
+
+		private bool disposed = false;
 
 		#endregion
 
