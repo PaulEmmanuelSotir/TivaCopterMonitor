@@ -17,53 +17,46 @@ namespace TivaCopterMonitor.ViewModel
 	{
 		public TivaCopterViewModel()
 		{
-			_bluetoothConnection = new DataAccessLayer.BluetoothCmdLineInterface(TaskScheduler.FromCurrentSynchronizationContext());
+			_bluetoothConnection = new DataAccessLayer.BluetoothDeviceConnection(TaskScheduler.FromCurrentSynchronizationContext());
 			//_DataHistory = new List<JSONDataSource>();
 
 			ConnectCommand = new RelayCommand(async command =>
 			{
 				if (_bluetoothConnection != null && SelectedBluetoothDevice != null)
-					await _bluetoothConnection.ConnectDevice(SelectedBluetoothDevice);
+					await _bluetoothConnection.OpenDeviceAsync(SelectedBluetoothDevice);
 			});
 
-			_bluetoothConnection.StateChanged += new EventHandler(async (sender, args) =>
+			_bluetoothConnection.OnSocketConnected += new TypedEventHandler<DataAccessLayer.BluetoothDeviceConnection, DeviceInformation>(async (connection, deviceInfo) =>
 			{
-				//Raise property changed event on UI thread
-				await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-				{
-					OnPropertyChanged("BluetoothState");
-				});
-
+				// TODO: faire mieux que ça !!
 				// If we just get connected to tivacopter, send commands to enable programmatic access mode, enable datasources and start JSON communication.
-				if (_bluetoothConnection.State == DataAccessLayer.BluetoothConnectionState.Connected)
-				{
-					await Task.Delay(TimeSpan.FromSeconds(0.5));
-					await _bluetoothConnection.SetProgramaticAccessMode(true);
-					await Task.Delay(TimeSpan.FromSeconds(0.1));
-					await _bluetoothConnection.EnableDatasource(typeof(IMU));
-					await Task.Delay(TimeSpan.FromSeconds(0.1));
-					await _bluetoothConnection.EnableDatasource(typeof(PID));
-					await Task.Delay(TimeSpan.FromSeconds(0.1));
-					await _bluetoothConnection.EnableDatasource(typeof(sensors));
-					await Task.Delay(TimeSpan.FromSeconds(0.1));
-					await _bluetoothConnection.EnableDatasource(typeof(radio));
-					await Task.Delay(TimeSpan.FromSeconds(0.1));
-					await _bluetoothConnection.Start();
-					await Task.Delay(TimeSpan.FromSeconds(0.1));
-				}
+				await Task.Delay(TimeSpan.FromSeconds(0.5));
+				await _bluetoothConnection.SetProgramaticAccessMode(true);
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
+				await _bluetoothConnection.EnableDatasource(typeof(IMU));
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
+				await _bluetoothConnection.EnableDatasource(typeof(PID));
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
+				await _bluetoothConnection.EnableDatasource(typeof(sensors));
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
+				await _bluetoothConnection.EnableDatasource(typeof(radio));
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
+				await _bluetoothConnection.Start();
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
 			});
 
-			_bluetoothConnection.CmdLineBufferChanged += new EventHandler(async (sender, args) =>
+			_bluetoothConnection.ConsoleBufferChanged += new EventHandler(async (sender, args) =>
 			{
 				//Raise event on UI thread
 				await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
 				{
-					OnPropertyChanged("BluetoothBuffer");
+					OnPropertyChanged("ConsoleBuffer");
 				});
 			});
 
-			_bluetoothConnection.JSONObjectReceived += new TypedEventHandler<DataAccessLayer.BluetoothCmdLineInterface, JSONDataSource>((sender, data) =>
+			_bluetoothConnection.OnJSONObjectReceived += new TypedEventHandler<DataAccessLayer.BluetoothDeviceConnection, JSONDataSource>((sender, data) =>
 			{
+				// TODO : enlever ça ou l'implémenter.
 				//_DataHistory.Add(data);
 
 				if (data is IMU)
@@ -81,12 +74,11 @@ namespace TivaCopterMonitor.ViewModel
 		{
 			await _bluetoothConnection.EnumerateDevicesAsync();
 
-			if (_bluetoothConnection.PairedDevices.Count != 0)
-				SelectedBluetoothDevice = _bluetoothConnection.PairedDevices[0];
+			if (_bluetoothConnection.AvailableDevices.Count != 0)
+				SelectedBluetoothDevice = _bluetoothConnection.AvailableDevices[0];
 			else
 				SelectedBluetoothDevice = null;
 		}
-
 
 		#region IDisposable
 
@@ -121,21 +113,16 @@ namespace TivaCopterMonitor.ViewModel
 
 		public ObservableCollection<DeviceInformation> BluetoothPairedDevices
 		{
-			get { return _bluetoothConnection.PairedDevices; }
-		}
-
-		public DataAccessLayer.BluetoothConnectionState BluetoothState
-		{
-			get { return _bluetoothConnection.State; }
+			get { return _bluetoothConnection.AvailableDevices; }
 		}
 
 		public RelayCommand ConnectCommand { get; set; }
 
 		public DeviceInformation SelectedBluetoothDevice { get; set; }
 
-		public String BluetoothBuffer
+		public String ConsoleBuffer
 		{
-			get { return _bluetoothConnection.CmdLineBuffer; }
+			get { return _bluetoothConnection.ConsoleBuffer; }
 		}
 
 		public IMU IMU
@@ -166,13 +153,14 @@ namespace TivaCopterMonitor.ViewModel
 
 		#region Members
 
-		protected DataAccessLayer.BluetoothCmdLineInterface _bluetoothConnection;
+		protected DataAccessLayer.BluetoothDeviceConnection _bluetoothConnection;
 
 		protected IMU _IMU;
 		protected PID _PID;
 		protected sensors _sensors;
 		protected radio _radio;
 
+		// TODO : enlever ça ou l'implémenter.
 		//protected IList<JSONDataSource> _DataHistory;
 
 		#endregion
