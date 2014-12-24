@@ -28,6 +28,11 @@ namespace TivaCopterMonitor.Model
 		public float q1 { get; set; }
 		public float q2 { get; set; }
 		public float q3 { get; set; }
+
+		// Position
+		public float px { get; set; }
+		public float py { get; set; }
+		public float pz { get; set; }
 	}
 
 	public class sensors : JSONDataSource
