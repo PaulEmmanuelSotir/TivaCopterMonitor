@@ -93,18 +93,23 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
+		<!-- Animated background -->
 		<Grid Grid.RowSpan="3" DataContext="{Binding IMU}" RenderTransformOrigin="0.5,0.5">
 			<Grid.RenderTransform>
-				<CompositeTransform Rotation="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" TranslateY="{Binding PitchDegree, Converter={StaticResource ScaleConverter}, ConverterParameter=-10}"/>
+				<!-- Apply transfroms in a specific order -->
+				<TransformGroup>
+					<TranslateTransform Y="{Binding PitchDegree, Converter={StaticResource ScaleConverter}, ConverterParameter=-15}" X="{Binding YawDegree, Converter={StaticResource ScaleConverter}, ConverterParameter=15}"/>
+					<RotateTransform Angle="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" />
+				</TransformGroup>
 			</Grid.RenderTransform>
 			<Grid.RowDefinitions>
+				<RowDefinition Height="4*"/>
 				<RowDefinition Height="3*"/>
-				<RowDefinition Height="2*"/>
 			</Grid.RowDefinitions>
 
 			<Grid x:Name="BackgroundGrid" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
 				<Grid.RenderTransform>
-					<CompositeTransform ScaleX="2" ScaleY="3"/>
+					<CompositeTransform ScaleX="4" ScaleY="4"/>
 				</Grid.RenderTransform>
 
 				<Grid.RowDefinitions>
@@ -113,18 +118,21 @@
 				</Grid.RowDefinitions>
 
 				<Grid.Background>
-					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<LinearGradientBrush EndPoint="0,1" StartPoint="0,-1">
 						<LinearGradientBrush.RelativeTransform >
-							<CompositeTransform CenterY="0.5" ScaleY="0.5" TranslateY="0.2"/>
+							<CompositeTransform CenterY="0.68" ScaleY="0.3" />
 						</LinearGradientBrush.RelativeTransform>
-						<GradientStop Color="#FFFBD8A6" Offset="0.757"/>
-						<GradientStop Color="#FF081F74" Offset="0.274"/>
+						<GradientStop Color="#FFFBD8A6" Offset="0.639"/>
+						<GradientStop Color="#FF081F74" Offset="0.404"/>
 						<GradientStop Color="Black"/>
-						<GradientStop Color="#FFEC6304" Offset="0.95"/>
-						<GradientStop Color="#FFB5DDFF" Offset="0.599"/>
-						<GradientStop Color="#FFFFC175" Offset="0.868"/>
-						<GradientStop Color="#FF030E3C" Offset="0.17"/>
-						<GradientStop Color="#FF6E5C4A" Offset="0.953"/>
+						<GradientStop Color="#FFEC6304" Offset="0.726"/>
+						<GradientStop Color="#FFB5DDFF" Offset="0.57"/>
+						<GradientStop Color="#FFFFC175" Offset="0.683"/>
+						<GradientStop Color="#FF030E3C" Offset="0.343"/>
+						<GradientStop Color="#FF6E5C4A" Offset="0.73"/>
+						<GradientStop Color="Black" Offset="1"/>
+						<GradientStop Color="#FF4B3D2F" Offset="0.817"/>
+						<GradientStop Color="#FE010519" Offset="0.257"/>
 					</LinearGradientBrush>
 				</Grid.Background>
 			</Grid>
@@ -139,8 +147,8 @@
 			</Canvas>
 
 			<!-- CLouds -->
-			<Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Right">
-				<Canvas Width="700" Height="300" RenderTransformOrigin="0.5,0.5">
+			<Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Right" Margin="0,0,0,40">
+				<Canvas Width="900" Height="300" RenderTransformOrigin="0.5,0.5">
 					<Canvas.RenderTransform>
 						<CompositeTransform Rotation="4"/>
 					</Canvas.RenderTransform>
@@ -149,7 +157,7 @@
 							<CompositeTransform ScaleX="1.05" ScaleY="0.95"/>
 						</Path.RenderTransform>
 					</Path>
-					<Path x:Name="Cloud2" Canvas.Top="50" Canvas.Left="500" Fill="#FFECECEC" Data="M420 200c0 35.344-28.656 64-64 64 v0.5h-272 c-44.188 0-80-35.813-80-80 c0-38.75 27.563-71.063 64.156-78.406  c0-0.531-0.156-1.031-0.156-1.594 c0-53.031 42.969-96 96-96 c37.438 0 69.5 21.625 85.344 52.875  c8.375-2.938 17.25-4.875 26.656-4.875 c43.844 0 79.344 35.25 79.906 79 h0.094 v0.5 C391.344 136 420 164.656 420 200z">
+					<Path x:Name="Cloud2" Canvas.Top="50" Canvas.Left="620" Fill="#FFECECEC" Data="M420 200c0 35.344-28.656 64-64 64 v0.5h-272 c-44.188 0-80-35.813-80-80 c0-38.75 27.563-71.063 64.156-78.406  c0-0.531-0.156-1.031-0.156-1.594 c0-53.031 42.969-96 96-96 c37.438 0 69.5 21.625 85.344 52.875  c8.375-2.938 17.25-4.875 26.656-4.875 c43.844 0 79.344 35.25 79.906 79 h0.094 v0.5 C391.344 136 420 164.656 420 200z">
 						<Path.RenderTransform>
 							<CompositeTransform ScaleX="0.45" ScaleY="0.35"/>
 						</Path.RenderTransform>
@@ -403,9 +411,11 @@
 						<TextBlock Grid.Row="5" Text="3D View" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,10"/>
 
 						<!-- 3D view -->
-						<Viewbox Grid.Row="6" Width="150">
+						<Viewbox Grid.Row="6" Width="150" RenderTransformOrigin="0.5,0.5">
 							<Viewbox.Projection>
-								<PlaneProjection RotationX="{Binding PitchDegree, Converter={StaticResource OppositeConverter}, ConverterParameter=-75}" RotationZ="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" RotationY="{Binding YawDegree, Converter={StaticResource OppositeConverter}}"/>
+								<!-- TODO: correct order of rotations -->
+								<PlaneProjection RotationX="{Binding PitchDegree, Converter={StaticResource OppositeConverter}, ConverterParameter=-75}" RotationZ="{Binding RollDegree, Converter={StaticResource OppositeConverter}}" RotationY="{Binding YawDegree, Converter={StaticResource OppositeConverter}}" 
+												 GlobalOffsetX="{Binding px}" GlobalOffsetY="{Binding py}" GlobalOffsetZ="{Binding pz}"/>
 							</Viewbox.Projection>
 							<Canvas Width="600" Height="600" RenderTransformOrigin="0.5,0.5">
 								<Rectangle Canvas.Left="290" Canvas.Top="45" Width="20" Height="110" Fill="White"/>
