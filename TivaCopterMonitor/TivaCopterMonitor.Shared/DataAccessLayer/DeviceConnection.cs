@@ -16,8 +16,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 {
 	public abstract class DeviceConnection : IDisposable
 	{
-		protected DeviceConnection()
+		protected DeviceConnection(TaskScheduler UITaskScheduler)
 		{
+			this.UITaskScheduler = UITaskScheduler;
 			AvailableDevices = new ObservableCollection<DeviceInformation>();
 			IsEnabledAutoReconnect = true;
 		}
@@ -57,6 +58,8 @@ namespace TivaCopterMonitor.DataAccessLayer
 		/// True if DeviceConnection will attempt to reconnect to the device once it is available to the computer again
 		/// </summary>
 		public Boolean IsEnabledAutoReconnect { get; set; }
+
+		public TaskScheduler UITaskScheduler { get; private set;}
 
 		#endregion
 

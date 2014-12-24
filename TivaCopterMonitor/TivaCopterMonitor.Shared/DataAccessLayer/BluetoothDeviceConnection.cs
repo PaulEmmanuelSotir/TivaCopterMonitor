@@ -15,12 +15,11 @@ namespace TivaCopterMonitor.DataAccessLayer
 {
 	public class BluetoothDeviceConnection : DeviceConnection
 	{
-		public BluetoothDeviceConnection(TaskScheduler ReadingTaskScheduler)
-			: base()
+		public BluetoothDeviceConnection(TaskScheduler UITaskScheduler)
+			: base(UITaskScheduler)
 		{
 			DeviceSelector = RfcommDeviceService.GetDeviceSelector(RfcommServiceId.SerialPort);
 			_ConsoleBuffer = new StringBuilder(64);
-			_readingTaskScheduler = ReadingTaskScheduler;
 
 			OnDeviceConnected += new TypedEventHandler<DeviceConnection, DeviceInformation>(async (connection, deviceInfo) =>
 			{
@@ -92,7 +91,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 								if (!_isJSONCommunicationStarted && ConsoleBufferChanged != null)
 									ConsoleBufferChanged(this, null);
 							}
-						}, _readingTaskScheduler);
+						}, UITaskScheduler);
 					}
 					catch (TaskCanceledException)
 					{
@@ -302,7 +301,6 @@ namespace TivaCopterMonitor.DataAccessLayer
 		private DataWriter _writer;
 		private DataReader _reader;
 		private StringBuilder _ConsoleBuffer;
-		private TaskScheduler _readingTaskScheduler;
 
 		private bool _isSocketConnected;
 	}

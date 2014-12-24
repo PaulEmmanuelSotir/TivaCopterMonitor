@@ -15,8 +15,8 @@ namespace TivaCopterMonitor.DataAccessLayer
 {
 	public class HIDDeviceConnection : DeviceConnection
 	{
-		public HIDDeviceConnection()
-			: base()
+		public HIDDeviceConnection(TaskScheduler UITaskScheduler, UInt16 usagePage, UInt16 usageId)
+			: base(UITaskScheduler)
 		{
 			//DeviceSelector = RfcommDeviceService.GetDeviceSelector(RfcommServiceId.SerialPort);
 
