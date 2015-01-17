@@ -39,7 +39,7 @@ namespace TivaCopterMonitor.ViewModel
 			{
 				// TODO: faire mieux que ça !!
 				// If we just get connected to tivacopter, send commands to enable programmatic access mode, enable datasources and start JSON communication.
-				await Task.Delay(TimeSpan.FromSeconds(0.5));
+				await Task.Delay(TimeSpan.FromSeconds(2.5));
 				await _bluetoothConnection.SetProgramaticAccessMode(true);
 				await Task.Delay(TimeSpan.FromSeconds(0.1));
 				await _bluetoothConnection.EnableDatasource(typeof(IMU));
@@ -51,7 +51,6 @@ namespace TivaCopterMonitor.ViewModel
 				await _bluetoothConnection.EnableDatasource(typeof(radio));
 				await Task.Delay(TimeSpan.FromSeconds(0.1));
 				await _bluetoothConnection.Start();
-				await Task.Delay(TimeSpan.FromSeconds(0.1));
 			});
 
 			_bluetoothConnection.ConsoleBufferChanged += new EventHandler(async (sender, args) =>
