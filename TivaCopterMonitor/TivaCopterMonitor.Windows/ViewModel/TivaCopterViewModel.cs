@@ -23,7 +23,16 @@ namespace TivaCopterMonitor.ViewModel
 			ConnectCommand = new RelayCommand(async command =>
 			{
 				if (_bluetoothConnection != null && SelectedBluetoothDevice != null)
-					await _bluetoothConnection.OpenDeviceAsync(SelectedBluetoothDevice);
+				{
+					try
+					{
+						await _bluetoothConnection.OpenDeviceAsync(SelectedBluetoothDevice);
+					}
+					catch (System.Exception)
+					{
+						// TODO: notify user that device connection failed
+					}
+				}
 			});
 
 			_bluetoothConnection.OnSocketConnected += new TypedEventHandler<DataAccessLayer.BluetoothDeviceConnection, DeviceInformation>(async (connection, deviceInfo) =>
