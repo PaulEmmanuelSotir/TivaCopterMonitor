@@ -68,8 +68,8 @@ namespace TivaCopterMonitor.DataAccessLayer
 										try
 										{
 											var DeserializedData = JsonConvert.DeserializeObject<JSONDataSource>(_JSONRawData.ToString(), new JsonDataSourceConverter(), new BoolConverter());
-											if (DeserializedData != null && OnJSONObjectReceived != null)
-												OnJSONObjectReceived(this, DeserializedData);
+											if (DeserializedData != null)
+												OnJSONObjectReceived?.Invoke(this, DeserializedData);
 										}
 										catch (Newtonsoft.Json.JsonReaderException) { }
 										finally
@@ -102,12 +102,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 			OnDeviceClose += new TypedEventHandler<DeviceConnection, DeviceInformation>((connection, deviceInfo) =>
 			{
-				if (_connectAction != null)
-				{
-					if (_connectAction.Status == AsyncStatus.Started)
-						_connectAction.Cancel();
-					_connectAction = null;
-				}
+				if (_connectAction?.Status == AsyncStatus.Started)
+						_connectAction?.Cancel();
+				_connectAction = null;
 
 				_reader?.DetachStream();
 				_reader?.Dispose();
@@ -140,7 +137,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		public void AbortConnection()
 		{
-			if (_connectAction.Status == AsyncStatus.Started)
+			if (_connectAction?.Status == AsyncStatus.Started)
 				_connectAction?.Cancel();
 		}
 

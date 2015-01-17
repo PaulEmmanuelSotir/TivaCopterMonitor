@@ -75,9 +75,6 @@ namespace TivaCopterMonitor.DataAccessLayer
 			{
 				DeviceInformation = deviceInfo;
 
-				// Notify registered callback handle that the device has been opened
-				OnDeviceConnected?.Invoke(this, DeviceInformation);
-
 				if (_appSuspendEventHandler == null || _appResumeEventHandler == null)
 					RegisterForAppEvents();
 
@@ -97,6 +94,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 					// Start the device watcher after we made sure that the device is opened.
 					StartDeviceWatcher();
 				}
+
+				// Notify registered callback handle that the device has been opened
+				OnDeviceConnected?.Invoke(this, DeviceInformation);
 
 				return true;
 			}

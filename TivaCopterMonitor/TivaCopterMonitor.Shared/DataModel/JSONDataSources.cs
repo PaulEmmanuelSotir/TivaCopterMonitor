@@ -19,9 +19,9 @@ namespace TivaCopterMonitor.Model
 		public float Pitch { get; set; }
 		public float Roll { get; set; }
 
-		public float YawDegree { get { return 180 * Yaw / (float)Math.PI; } }
-		public float PitchDegree { get { return 180 * Pitch / (float)Math.PI; } }
-		public float RollDegree { get { return 180 * Roll / (float)Math.PI; } }
+		public float YawDegree  => 180 * Yaw / (float)Math.PI;
+		public float PitchDegree => 180 * Pitch / (float)Math.PI; 
+		public float RollDegree => 180 * Roll / (float)Math.PI;
 
 		// Quaternion
 		public float q0 { get; set; }
