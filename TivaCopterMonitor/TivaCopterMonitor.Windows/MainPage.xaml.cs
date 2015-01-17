@@ -33,25 +33,26 @@ namespace TivaCopterMonitor
 		/// property is typically used to configure the page.</param>
 		protected async override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			if (_tivaCopterVM != null)
-				await _tivaCopterVM.RefreshBluetoothDevices();
+			await _tivaCopterVM?.RefreshBluetoothDevices();
 		}
 
 		private void Page_Loaded(object sender, RoutedEventArgs e)
 		{
-			BluetoothDevicesSource.Source = _tivaCopterVM.BluetoothPairedDevices;
+			BluetoothDevicesSource.Source = _tivaCopterVM?.BluetoothPairedDevices;
 
 			MoonFall.Begin();
 		}
 
 		private ViewModel.TivaCopterViewModel _tivaCopterVM;
 		private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-		
+
 		#region IDisposable
 
 		public void Dispose()
 		{
 			_tivaCopterVM.Dispose();
+			_tivaCopterVM = null;
+
 			GC.SuppressFinalize(this);
 		}
 

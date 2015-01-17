@@ -620,7 +620,7 @@
 				</Border>
 
 				<!-- Radio -->
-				<Border DataContext="{Binding Radio}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" Style="{StaticResource ContentBorderStyle}">
+				<Border DataContext="{Binding Radio}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource ContentBorderStyle}">
 					<StackPanel>
 						<TextBlock Text="Radio" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,20"/>
 

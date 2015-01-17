@@ -48,15 +48,13 @@ namespace TivaCopterMonitor.ViewModel
 			_bluetoothConnection.ConsoleBufferChanged += new EventHandler(async (sender, args) =>
 			{
 				//Raise event on UI thread
-				await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-				{
-					OnPropertyChanged("ConsoleBuffer");
-				});
+				await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, ()
+					=> OnPropertyChanged("ConsoleBuffer"));
 			});
 
 			_bluetoothConnection.OnJSONObjectReceived += new TypedEventHandler<DataAccessLayer.BluetoothDeviceConnection, JSONDataSource>((sender, data) =>
 			{
-				// TODO : enlever ça ou l'implémenter.
+				// TODO: enlever ça ou l'implémenter.
 				//_DataHistory.Add(data);
 
 				if (data is IMU)
@@ -111,19 +109,13 @@ namespace TivaCopterMonitor.ViewModel
 
 		#region Properties
 
-		public ObservableCollection<DeviceInformation> BluetoothPairedDevices
-		{
-			get { return _bluetoothConnection.AvailableDevices; }
-		}
+		public ObservableCollection<DeviceInformation> BluetoothPairedDevices => _bluetoothConnection.AvailableDevices;
 
 		public RelayCommand ConnectCommand { get; set; }
 
 		public DeviceInformation SelectedBluetoothDevice { get; set; }
 
-		public String ConsoleBuffer
-		{
-			get { return _bluetoothConnection.ConsoleBuffer; }
-		}
+		public String ConsoleBuffer => _bluetoothConnection.ConsoleBuffer;
 
 		public IMU IMU
 		{

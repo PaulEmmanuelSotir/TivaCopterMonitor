@@ -45,7 +45,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 							StringBuilder _JSONRawData = new StringBuilder();
 
 							_isSocketConnected = true;
-							OnSocketConnected(this, deviceInfo);
+							OnSocketConnected?.Invoke(this, deviceInfo);
 
 							// Receiving loop
 							while (_reader != null)
@@ -88,8 +88,8 @@ namespace TivaCopterMonitor.DataAccessLayer
 								}
 
 								// Notify buffer changed
-								if (!_isJSONCommunicationStarted && ConsoleBufferChanged != null)
-									ConsoleBufferChanged(this, null);
+								if (!_isJSONCommunicationStarted)
+									ConsoleBufferChanged?.Invoke(this, null);
 							}
 						}, UITaskScheduler);
 					}
@@ -108,25 +108,20 @@ namespace TivaCopterMonitor.DataAccessLayer
 						_connectAction.Cancel();
 					_connectAction = null;
 				}
-				if (_reader != null)
-				{
-					_reader.DetachStream();
-					_reader.Dispose();
-					_reader = null;
-				}
-				if (_writer != null)
-				{
-					_writer.DetachStream();
-					_writer.Dispose();
-					_writer = null;
-				}
-				if (_socket != null)
-				{
-					_socket.Dispose();
-					_socket = null;
-				}
+
+				_reader?.DetachStream();
+				_reader?.Dispose();
+				_reader = null;
+
+				_writer?.DetachStream();
+				_writer?.Dispose();
+				_writer = null;
+
 				_isSocketConnected = false;
-				OnSocketClose(this, deviceInfo);
+				_socket?.Dispose();
+				_socket = null;
+				OnSocketClose?.Invoke(this, deviceInfo);
+
 				_isJSONCommunicationStarted = false;
 				_connectAction = null;
 			});
@@ -141,18 +136,12 @@ namespace TivaCopterMonitor.DataAccessLayer
 		///<summary>
 		/// Stores received data from bluetooth device except JSON objects.
 		///</summary>
-		public String ConsoleBuffer
-		{
-			get
-			{
-				return _ConsoleBuffer.ToString();
-			}
-		}
+		public String ConsoleBuffer => _ConsoleBuffer.ToString();
 
 		public void AbortConnection()
 		{
-			if (_connectAction != null && _connectAction.Status == AsyncStatus.Started)
-				_connectAction.Cancel();
+			if (_connectAction.Status == AsyncStatus.Started)
+				_connectAction?.Cancel();
 		}
 
 		private async Task Send(String str)
@@ -195,8 +184,12 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		protected override async Task<object> GetDeviceAsync(DeviceInformation deviceInfo)
 		{
-			// Initialize the target Bluetooth Device
-			_service = await RfcommDeviceService.FromIdAsync(deviceInfo.Id);
+			if (deviceInfo != null)
+			{
+				// Initialize the target Bluetooth Device
+				_service = await RfcommDeviceService.FromIdAsync(deviceInfo.Id);
+			}
+
 			return _service;
 		}
 

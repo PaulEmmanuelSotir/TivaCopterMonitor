@@ -28,13 +28,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		#region Properties
 
-		public Boolean IsDeviceConnected
-		{
-			get
-			{
-				return (_device != null);
-			}
-		}
+		public Boolean IsDeviceConnected => _device != null;
 
 		public ObservableCollection<DeviceInformation> AvailableDevices { get; private set; }
 
@@ -59,7 +53,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 		/// </summary>
 		public Boolean IsEnabledAutoReconnect { get; set; }
 
-		public TaskScheduler UITaskScheduler { get; private set;}
+		public TaskScheduler UITaskScheduler { get; private set; }
 
 		#endregion
 
@@ -71,22 +65,18 @@ namespace TivaCopterMonitor.DataAccessLayer
 		/// <param name="deviceInfo">Device information of the device to be opened</param>
 		/// <returns>True if the device was successfully opened, false if the device could not be opened for well known reasons.
 		/// An exception may be thrown if the device could not be opened for extraordinary reasons.</returns>
+		/// <remarks>This method should be called from UI thread. (may show authorization popup)</remarks>
 		public async Task<Boolean> OpenDeviceAsync(DeviceInformation deviceInfo)
 		{
 			_device = await GetDeviceAsync(deviceInfo);
 
-			Boolean successfullyOpenedDevice = false;
-
 			// Device could have been blocked by user or the device has already been opened by another app.
 			if (_device != null)
 			{
-				successfullyOpenedDevice = true;
-
 				DeviceInformation = deviceInfo;
 
 				// Notify registered callback handle that the device has been opened
-				if (OnDeviceConnected != null)
-					OnDeviceConnected(this, DeviceInformation);
+				OnDeviceConnected?.Invoke(this, DeviceInformation);
 
 				if (_appSuspendEventHandler == null || _appResumeEventHandler == null)
 					RegisterForAppEvents();
@@ -107,9 +97,11 @@ namespace TivaCopterMonitor.DataAccessLayer
 					// Start the device watcher after we made sure that the device is opened.
 					StartDeviceWatcher();
 				}
+
+				return true;
 			}
 
-			return successfullyOpenedDevice;
+			return false;
 		}
 
 		/// <summary>
@@ -170,6 +162,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 			}
 		}
 
+		/// <summary>
+		/// Must set _device handle by calling 'FromIdAsync'
+		/// </summary>
 		protected abstract Task<object> GetDeviceAsync(DeviceInformation deviceInfo);
 
 		/// <summary>
@@ -181,8 +176,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 			if (_device != null)
 			{
 				// Notify callback that we're about to close the device
-				if (OnDeviceClose != null)
-					OnDeviceClose(this, DeviceInformation);
+				OnDeviceClose?.Invoke(this, DeviceInformation);
 
 				// This closes the handle to the device if device is disposable
 				if (_device is IDisposable)
@@ -262,17 +256,13 @@ namespace TivaCopterMonitor.DataAccessLayer
 			_watcherStarted = true;
 
 			if ((_deviceWatcher.Status != DeviceWatcherStatus.Started) && (_deviceWatcher.Status != DeviceWatcherStatus.EnumerationCompleted))
-			{
 				_deviceWatcher.Start();
-			}
 		}
 
 		private void StopDeviceWatcher()
 		{
 			if ((_deviceWatcher.Status == DeviceWatcherStatus.Started) || (_deviceWatcher.Status == DeviceWatcherStatus.EnumerationCompleted))
-			{
 				_deviceWatcher.Stop();
-			}
 
 			_watcherStarted = false;
 		}
@@ -296,9 +286,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 				StopDeviceWatcher();
 			}
 			else
-			{
 				_watcherSuspended = false;
-			}
 
 			CloseCurrentlyConnectedDevice();
 		}
