@@ -70,10 +70,10 @@ namespace TivaCopterMonitor.Model
 	public class radio : JSONDataSource
 	{
 		// radio outputs
-		public bool ch0 { get; set; }
-		public bool ch1 { get; set; }
-		public bool ch2 { get; set; }
-		public bool ch3 { get; set; }
-		public bool ch4 { get; set; }
+		public bool in0 { get; set; }
+		public bool in1 { get; set; }
+		public bool in2 { get; set; }
+		public bool in3 { get; set; }
+		public bool in4 { get; set; }
 	}
 }

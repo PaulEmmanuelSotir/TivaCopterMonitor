@@ -627,36 +627,36 @@
 						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
 								<TextBlock Text="OUTPUT 0" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding ch0, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding ch0, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+								<Rectangle Visibility="{Binding in0, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding in0, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
 						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
 								<TextBlock Text="OUTPUT 1" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding ch1, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding ch1, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+								<Rectangle Visibility="{Binding in1, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding in1, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
 						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
 								<TextBlock Text="OUTPUT 2" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding ch2, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding ch2, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+								<Rectangle Visibility="{Binding in2, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding in2, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
 						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
 								<TextBlock Text="OUTPUT 3" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding ch3, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding ch3, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+								<Rectangle Visibility="{Binding in3, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding in3, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
 						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
 							<Grid>
 								<TextBlock Text="OUTPUT 4" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding ch4, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding ch4, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+								<Rectangle Visibility="{Binding in4, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+								<Rectangle Visibility="{Binding in4, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
 							</Grid>
 						</Border>
 					</StackPanel>

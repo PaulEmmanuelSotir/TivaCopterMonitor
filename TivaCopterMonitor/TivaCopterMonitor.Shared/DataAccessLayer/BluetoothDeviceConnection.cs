@@ -67,7 +67,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 									{
 										try
 										{
-											var DeserializedData = JsonConvert.DeserializeObject<JSONDataSource>(_JSONRawData.ToString(), new JsonDataSourceConverter());
+											var DeserializedData = JsonConvert.DeserializeObject<JSONDataSource>(_JSONRawData.ToString(), new JsonDataSourceConverter(), new BoolConverter());
 											if (DeserializedData != null && OnJSONObjectReceived != null)
 												OnJSONObjectReceived(this, DeserializedData);
 										}
