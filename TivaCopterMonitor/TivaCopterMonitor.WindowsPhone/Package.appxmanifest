@@ -30,5 +30,11 @@
 				<m2:Function Type="name:serialPort" />
 			</m2:Device>
 		</m2:DeviceCapability>
+		<m2:DeviceCapability Name="humaninterfacedevice">
+			<m2:Device Id="any">
+				<m2:Function Type="usage:0001 0004"/>
+				<m2:Function Type="usage:0001 0005"/>
+			</m2:Device>
+		</m2:DeviceCapability>
   </Capabilities>
 </Package>
