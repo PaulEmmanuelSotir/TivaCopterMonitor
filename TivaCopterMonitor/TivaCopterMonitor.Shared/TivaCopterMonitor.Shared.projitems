@@ -23,7 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\BluetoothDeviceConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\HIDDeviceConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\JSONConverters.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataModel\TivaCopterControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\JSONDataInputs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\JSONDataSources.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\TivaCopterHardware.cs" />
   </ItemGroup>

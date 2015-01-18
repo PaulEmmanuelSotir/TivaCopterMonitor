@@ -166,7 +166,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 			}
 		}
 
-		public async Task Send(JSONRemoteOrder ctrl)
+		public async Task Send(JSONDataInput ctrl)
 		{
 			if (_isSocketConnected && IsDeviceConnected && _isJSONCommunicationStarted)
 			{
