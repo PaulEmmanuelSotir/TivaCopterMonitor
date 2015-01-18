@@ -16,7 +16,10 @@ namespace TivaCopterMonitor.Model
 
 	public sealed class IMU : JSONDataSource
 	{
-		// Euler angles
+		/// <summary>
+		/// Euler angles
+		/// The values must be between -PI and PI.
+		/// </summary>
 		[JsonProperty(Order = 4, Required = Required.Always)]
 		public float Yaw { get; set; }
 		[JsonProperty(Order = 5, Required = Required.Always)]
@@ -24,6 +27,9 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 6, Required = Required.Always)]
 		public float Roll { get; set; }
 
+		/// <summary>
+		/// Euler angles in degrees
+		/// </summary>
 		[JsonIgnore]
 		public float YawDegree  => 180 * Yaw / (float)Math.PI;
 		[JsonIgnore]
@@ -31,7 +37,10 @@ namespace TivaCopterMonitor.Model
 		[JsonIgnore]
 		public float RollDegree => 180 * Roll / (float)Math.PI;
 
-		// Quaternion
+		/// <summary>
+		/// Quaternion
+		/// The values must be between -1 and 1.
+		/// </summary>
 		[JsonProperty(Order = 0, Required = Required.Always)]
 		public float q0 { get; set; }
 		[JsonProperty(Order = 1, Required = Required.Always)]
@@ -41,7 +50,9 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 3, Required = Required.Always)]
 		public float q3 { get; set; }
 
-		// Position
+		/// <summary>
+		/// Position vector
+		/// </summary>
 		[JsonProperty(Order = 7)]
 		public float px { get; set; }
 		[JsonProperty(Order = 8)]
@@ -52,7 +63,9 @@ namespace TivaCopterMonitor.Model
 
 	public sealed class sensors : JSONDataSource
 	{
-		// Accelerometer
+		/// <summary>
+		/// Acceleration vector
+		/// </summary>
 		[JsonProperty(Order = 0, Required = Required.Always)]
 		public float ax { get; set; }
 		[JsonProperty(Order = 1, Required = Required.Always)]
@@ -60,7 +73,9 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 2, Required = Required.Always)]
 		public float az { get; set; }
 
-		// Gyroscope
+		/// <summary>
+		/// Gyroscope measurement
+		/// </summary>
 		[JsonProperty(Order = 3, Required = Required.Always)]
 		public float gx { get; set; }
 		[JsonProperty(Order = 4, Required = Required.Always)]
@@ -68,7 +83,9 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 5, Required = Required.Always)]
 		public float gz { get; set; }
 
-		// Magnetometer
+		/// <summary>
+		/// Magnetometer measurement
+		/// </summary>
 		[JsonProperty(Order = 6)]
 		public float mx { get; set; }
 		[JsonProperty(Order = 7)]
@@ -79,7 +96,10 @@ namespace TivaCopterMonitor.Model
 
 	public sealed class PID : JSONDataSource
 	{
-		// Motors throttle
+		/// <summary>
+		/// Motors throttle
+		/// The values must be between 0 and 1.
+		/// </summary>
 		[JsonProperty(Order = 0, Required = Required.Always)]
 		public float Motor1 { get; set; }
 		[JsonProperty(Order = 1, Required = Required.Always)]
@@ -89,7 +109,9 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 3, Required = Required.Always)]
 		public float Motor4 { get; set; }
 
-		// Stabilisation PIDs output
+		/// <summary>
+		/// Stabilisation PIDs output
+		/// </summary>
 		[JsonProperty(Order = 4, Required = Required.Always)]
 		public float YawOut { get; set; }
 		[JsonProperty(Order = 5, Required = Required.Always)]
@@ -101,7 +123,9 @@ namespace TivaCopterMonitor.Model
 
 	public sealed class radio : JSONDataSource
 	{
-		// Radio outputs
+		/// <summary>
+		/// Radio outputs
+		/// </summary>
 		[JsonProperty(Order = 0, Required = Required.Always)]
 		public bool in0 { get; set; }
 		[JsonProperty(Order = 1, Required = Required.Always)]
