@@ -21,7 +21,7 @@ namespace TivaCopterMonitor.Model
 		/// The value must be between -1 and 1.
 		/// </summary>
 		[JsonProperty(Order = 0, Required = Required.Always)]
-		public double Throttle
+		public float Throttle
 		{
 			get { return _throttle; }
 			set { _throttle = Saturate(value, 0, 1); }
@@ -32,7 +32,7 @@ namespace TivaCopterMonitor.Model
 		/// The value must be between -1 and 1.
 		/// </summary>
 		[JsonProperty(Order = 1, Required = Required.Always)]
-		public double DirectionX
+		public float DirectionX
 		{
 			get { return _directionX; }
 			set { _directionX = Saturate(value, -1, 1); }
@@ -43,7 +43,7 @@ namespace TivaCopterMonitor.Model
 		/// The value must be between -1 and 1.
 		/// </summary>
 		[JsonProperty(Order = 2, Required = Required.Always)]
-		public double DirectionY
+		public float DirectionY
 		{
 			get { return _directionY; }
 			set { _directionY = Saturate(value, -1, 1); }
@@ -54,10 +54,10 @@ namespace TivaCopterMonitor.Model
 		/// The value must be between -PI and PI.
 		/// </summary>
 		[JsonProperty(Order = 3)]
-		public double Yaw
+		public float Yaw
 		{
 			get { return _yaw; }
-			set { _yaw = Saturate(value, -Math.PI, Math.PI); }
+			set { _yaw = Saturate(value, -(float)Math.PI, (float)Math.PI); }
 		}
 
 		/// </summary>
@@ -66,15 +66,15 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 4)]
 		public bool Beep { get; set; }
 
-		private static double Saturate(double val, double min, double max)
+		private static float Saturate(float val, float min, float max)
 		{
 			return Math.Min(Math.Max(val, min), max);
 		}
 
-		private double _throttle;
-		private double _directionX;
-		private double _directionY;
-		private double _yaw;
+		private float _throttle;
+		private float _directionX;
+		private float _directionY;
+		private float _yaw;
 	}
 
 	// TODO: s'occuper de PIDConfigurationDataInput
