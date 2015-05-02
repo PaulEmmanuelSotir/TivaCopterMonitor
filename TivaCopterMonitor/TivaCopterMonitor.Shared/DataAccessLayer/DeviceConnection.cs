@@ -60,7 +60,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 		/// <returns>True if the device was successfully opened, false if the device could not be opened for well known reasons.
 		/// An exception may be thrown if the device could not be opened for extraordinary reasons.</returns>
 		/// <remarks>This method should be called from UI thread. (may show authorization popup)</remarks>
-		public async Task<Boolean> OpenDeviceAsync(DeviceInformation deviceInfo)
+		public async Task OpenDeviceAsync(DeviceInformation deviceInfo)
 		{
 			_device = await GetDeviceAsync(deviceInfo);
 
@@ -79,7 +79,16 @@ namespace TivaCopterMonitor.DataAccessLayer
 				// Create and register device watcher events for the device to be opened unless we're reopening the device
 				if (_deviceWatcher == null)
 				{
-					_deviceWatcher = DeviceInformation.CreateWatcher(DeviceSelector);
+					try
+					{
+						_deviceWatcher = DeviceInformation.CreateWatcher(DeviceSelector);
+					}
+					catch (UnauthorizedAccessException)
+					{
+						// TODO: show error message / throw error event
+						return;
+					}
+
 					RegisterForDeviceWatcherEvents();
 				}
 
@@ -91,11 +100,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 				// Notify registered callback handle that the device has been opened
 				OnDeviceConnected?.Invoke(this, DeviceInformation);
-
-				return true;
 			}
-
-			return false;
 		}
 
 		/// <summary>
