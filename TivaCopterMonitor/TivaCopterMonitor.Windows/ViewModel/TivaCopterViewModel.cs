@@ -55,28 +55,32 @@ namespace TivaCopterMonitor.ViewModel
 
 					HidInputReport lastInputReport;
 
-					_controlsSettingsWaitForHidKey_EventHandler = new EventHandler<object>((sender, arg) =>
+					_controlsSettingsWaitForHidKey_EventHandler = new EventHandler<object>(async (sender, arg) =>
 					{
-						if (((System.Reflection.PropertyInfo)_waitingHIDToControlBinding?.Property).PropertyType == typeof(bool))
+						if (IsControlsSettingPopupOpen)
 						{
-							// TODO : savoir si ActivatedBooleanControls peut réellement devenir null
-							if (_hidConnection.Report.ActivatedBooleanControls?.Count > 0)
+							if (((System.Reflection.PropertyInfo)_waitingHIDToControlBinding?.Property).PropertyType == typeof(bool))
 							{
-								var ActivatedBooleanControls = _hidConnection.Report.ActivatedBooleanControls;
-								if (ActivatedBooleanControls.Count > 0)
+								// TODO : savoir si ActivatedBooleanControls peut réellement devenir null
+								if (_hidConnection.Report.ActivatedBooleanControls?.Count > 0)
 								{
-									var ActivatedBooleanControl = ActivatedBooleanControls[0];
-									_waitingHIDToControlBinding.UsageId = ActivatedBooleanControl.UsageId;
-									_waitingHIDToControlBinding.UsagePage = ActivatedBooleanControl.UsagePage;
-								}
+									var ActivatedBooleanControls = _hidConnection.Report.ActivatedBooleanControls;
+									if (ActivatedBooleanControls.Count > 0)
+									{
+										var ActivatedBooleanControl = ActivatedBooleanControls[0];
+										_waitingHIDToControlBinding.UsageId = ActivatedBooleanControl.UsageId;
+										_waitingHIDToControlBinding.UsagePage = ActivatedBooleanControl.UsagePage;
+									}
 
-								CloseControlsSettingPopup();
+									CloseControlsSettingPopup();
+									await SaveHid();
+								}
 							}
-						}
-						else
-						{
-							// TODO: check changed numeric values by comparing lastInputReport with _hidConnection.Report
-							lastInputReport = _hidConnection.Report;
+							else
+							{
+								// TODO: check changed numeric values by comparing lastInputReport with _hidConnection.Report
+								lastInputReport = _hidConnection.Report;
+							}
 						}
 					});
 					_timer.Tick += _controlsSettingsWaitForHidKey_EventHandler;
@@ -129,30 +133,37 @@ namespace TivaCopterMonitor.ViewModel
 
 			if (_hidConnection.IsDeviceConnected)
 			{
-				StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("HIDControlMap.xml", CreationCollisionOption.OpenIfExists);
+				try
+				{
+					StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync(HID_KEYMAP_FILENAME);
 
-				//ControlMap.DataMap[0].UsagePage = 0x0001;
-				//ControlMap.DataMap[0].UsageId = 0x0031;
-				//ControlMap.DataMap[1].UsagePage = 0x0001;
-				//ControlMap.DataMap[1].UsageId = 0x0031;
-				//ControlMap.DataMap[2].UsagePage = 0x0001;
-				//ControlMap.DataMap[2].UsageId = 0x0030;
-				//ControlMap.DataMap[3].UsagePage = 0x0001;
-				//ControlMap.DataMap[3].UsageId = 0x0030;
-				//ControlMap.DataMap[4].UsagePage = 0x0009;
-				//ControlMap.DataMap[4].UsageId = 0x000C;
-				//ControlMap.DataMap[5].UsagePage = 0x0009;
-				//ControlMap.DataMap[5].UsageId = 0x0001;
-				//var ser = new System.Runtime.Serialization.DataContractSerializer(typeof(HIDDataMap<RemoteControl>));
-				//ser.WriteObject(await file.OpenStreamForWriteAsync(), ControlMap);
-
-				//serializer.Serialize(System.Xml.XmlWriter.Create(await file.OpenStreamForWriteAsync()), ControlMap);
-
-				var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(HIDDataMap<RemoteControl>));
-
-				var result = serializer.ReadObject(await file.OpenStreamForReadAsync());
-				if (result.GetType() == typeof(HIDDataMap<RemoteControl>))
-					ControlMap = result as HIDDataMap<RemoteControl>;
+					// Open existing HID key map xml file
+					var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(HIDDataMap<RemoteControl>));
+					using (var stream = await file.OpenStreamForReadAsync())
+					{
+						var result = serializer.ReadObject(stream);
+						await stream.FlushAsync();
+						if (result.GetType() == typeof(HIDDataMap<RemoteControl>))
+							ControlMap = result as HIDDataMap<RemoteControl>;
+					}					
+				}
+				catch (FileNotFoundException e)
+				{
+					// TODO : remove static key map and copy a asset keymap xml file to local state at first app lunch ?
+					ControlMap.DataMap[0].UsagePage = 0x0001;
+					ControlMap.DataMap[0].UsageId = 0x0031;
+					ControlMap.DataMap[1].UsagePage = 0x0001;
+					ControlMap.DataMap[1].UsageId = 0x0031;
+					ControlMap.DataMap[2].UsagePage = 0x0001;
+					ControlMap.DataMap[2].UsageId = 0x0030;
+					ControlMap.DataMap[3].UsagePage = 0x0001;
+					ControlMap.DataMap[3].UsageId = 0x0030;
+					ControlMap.DataMap[4].UsagePage = 0x0009;
+					ControlMap.DataMap[4].UsageId = 0x000C;
+					ControlMap.DataMap[5].UsagePage = 0x0009;
+					ControlMap.DataMap[5].UsageId = 0x0001;
+					await SaveHid();
+				}
 			}
 
 			// TODO: faire mieux que ça !!
@@ -193,6 +204,20 @@ namespace TivaCopterMonitor.ViewModel
 			_timer.Tick -= _controlsSettingsWaitForHidKey_EventHandler;
 			_hidConnection.OnDeviceClose -= CloseControlsSettingPopup;
 		}
+
+		/// <summary>
+		/// Saves HID keymap to local state as XML file
+		/// </summary>
+		public async Task SaveHid()
+		{
+			StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(HID_KEYMAP_FILENAME, CreationCollisionOption.ReplaceExisting);
+			var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(HIDDataMap<RemoteControl>));
+			using (var stream = await file.OpenStreamForWriteAsync())
+			{
+				serializer.WriteObject(stream, ControlMap);
+				await stream.FlushAsync();
+			}
+        }
 
 		public async Task RefreshBluetoothDevices()
 		{
@@ -340,6 +365,7 @@ namespace TivaCopterMonitor.ViewModel
 
 		protected HIDDeviceConnection _hidConnection;
 		private DispatcherTimer _timer;
+		private const string HID_KEYMAP_FILENAME = "HIDControlMap.xml";
 
 		private HIDDataMap<RemoteControl> _controlMap;
 		private PropertyToHidAttributeBinding _waitingHIDToControlBinding;

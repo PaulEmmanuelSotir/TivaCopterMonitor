@@ -79,6 +79,7 @@ namespace TivaCopterMonitor
 		}
 
 		private bool disposed = false;
+
 		#endregion
 
 	}
