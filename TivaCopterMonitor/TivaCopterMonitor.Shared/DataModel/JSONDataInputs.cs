@@ -61,6 +61,12 @@ namespace TivaCopterMonitor.Model
 		}
 
 		/// </summary>
+		/// Hold button save current control when pushed and retore saved controls when released (remap numeric controls within new range).
+		/// </summary>
+		[JsonIgnore]
+		public bool Hold { get; set; }
+
+		/// </summary>
 		/// Klaxon !
 		/// </summary>
 		[JsonProperty(PropertyName = "beep", Order = 4)]
