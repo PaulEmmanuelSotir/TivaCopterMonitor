@@ -65,7 +65,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 			_device = await GetDeviceAsync(deviceInfo);
 
 			// Device could have been blocked by user or the device has already been opened by another app.
-			if (_device != null)
+			if (IsDeviceConnected)
 			{
 				DeviceInformation = deviceInfo;
 
@@ -172,7 +172,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 		/// <remarks>When the device is closing, it will cancel all IO operations that are still pending (not complete).</remarks>
 		private void CloseCurrentlyConnectedDevice()
 		{
-			if (_device != null)
+			if (IsDeviceConnected)
 			{
 				// Notify callback that we're about to close the device
 				OnDeviceClose?.Invoke(this, DeviceInformation);

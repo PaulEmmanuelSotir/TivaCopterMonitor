@@ -34,11 +34,17 @@ namespace TivaCopterMonitor.DataAccessLayer
 					{
 						await _connectAction.AsTask().ContinueWith(async (task) =>
 						{
+							if (task.Status != TaskStatus.RanToCompletion)
+							{
+								CloseDevice();
+								return;
+							}
+
 							_writer = new DataWriter(_socket.OutputStream);
 							_writer.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
 							_reader = new DataReader(_socket.InputStream);
-                            _reader.InputStreamOptions = InputStreamOptions.Partial;
+							_reader.InputStreamOptions = InputStreamOptions.Partial;
 							_reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
 							// String builder storing the last received JSON string.
@@ -63,7 +69,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 									break;
 								}
 
-                                while (_reader.UnconsumedBufferLength > 0)
+								while (_reader.UnconsumedBufferLength > 0)
 								{
 									var c = (char)_reader.ReadByte();
 
@@ -92,7 +98,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 										// If the received data isn't JSON objects, add it to _ConsoleBuffer
 										_ConsoleBuffer.Append(c);
 									}
-								}								
+								}
 
 								// Notify buffer changed
 								if (!_isJSONCommunicationStarted)
@@ -110,12 +116,12 @@ namespace TivaCopterMonitor.DataAccessLayer
 			OnDeviceClose += new TypedEventHandler<DeviceConnection, DeviceInformation>((connection, deviceInfo) =>
 			{
 				if (_connectAction?.Status == AsyncStatus.Started)
-						_connectAction?.Cancel();
+					_connectAction?.Cancel();
 				_connectAction = null;
-				
+
 				_reader?.Dispose();
 				_reader = null;
-				
+
 				_writer?.Dispose();
 				_writer = null;
 
