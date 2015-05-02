@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Devices.Enumeration;
-using Windows.Devices.HumanInterfaceDevice;
 using System.Collections.ObjectModel;
 using Windows.Foundation;
-using Windows.Storage;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 
 namespace TivaCopterMonitor.DataAccessLayer

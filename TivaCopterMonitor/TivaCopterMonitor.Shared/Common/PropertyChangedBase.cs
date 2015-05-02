@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace TivaCopterMonitor.Common
 {
@@ -12,11 +10,7 @@ namespace TivaCopterMonitor.Common
 
 		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			var eventHandler = this.PropertyChanged;
-
-			if (eventHandler != null)
-				eventHandler(this, new PropertyChangedEventArgs(propertyName));
-
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 							_writer.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
 							_reader = new DataReader(_socket.InputStream);
-							_reader.InputStreamOptions = InputStreamOptions.Partial;
+                            _reader.InputStreamOptions = InputStreamOptions.Partial;
 							_reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
 							// String builder storing the last received JSON string.
@@ -105,12 +105,10 @@ namespace TivaCopterMonitor.DataAccessLayer
 				if (_connectAction?.Status == AsyncStatus.Started)
 						_connectAction?.Cancel();
 				_connectAction = null;
-
-				_reader?.DetachStream();
+				
 				_reader?.Dispose();
 				_reader = null;
-
-				_writer?.DetachStream();
+				
 				_writer?.Dispose();
 				_writer = null;
 

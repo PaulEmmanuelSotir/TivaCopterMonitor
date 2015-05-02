@@ -119,11 +119,11 @@ namespace TivaCopterMonitor.ViewModel
 
 		public ObservableCollection<DeviceInformation> BluetoothPairedDevices => _bluetoothConnection.AvailableDevices;
 
-		public RelayCommand ConnectCommand { get; set; }
+		public RelayCommand ConnectCommand { get; private set; }
 
 		public DeviceInformation SelectedBluetoothDevice { get; set; }
 
-		public String ConsoleBuffer => _bluetoothConnection.ConsoleBuffer;
+		public string ConsoleBuffer => _bluetoothConnection.ConsoleBuffer;
 
 		public IMU IMU
 		{
