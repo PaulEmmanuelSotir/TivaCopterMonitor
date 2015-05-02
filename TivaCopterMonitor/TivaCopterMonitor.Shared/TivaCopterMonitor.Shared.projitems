@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\AddScaleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\DeviceConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\BluetoothDeviceConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\HIDDataMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\HIDDeviceConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccessLayer\JSONConverters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\JSONDataInputs.cs" />
