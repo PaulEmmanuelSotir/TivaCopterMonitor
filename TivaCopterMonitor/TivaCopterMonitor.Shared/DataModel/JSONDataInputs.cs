@@ -20,7 +20,7 @@ namespace TivaCopterMonitor.Model
 		/// Global motors throttle.
 		/// The value must be between -1 and 1.
 		/// </summary>
-		[JsonProperty(Order = 0, Required = Required.Always)]
+		[JsonProperty(PropertyName = "throttle", Order = 0, Required = Required.Always)]
 		public float Throttle
 		{
 			get { return _throttle; }
@@ -31,7 +31,7 @@ namespace TivaCopterMonitor.Model
 		/// The X component of the direction vector.
 		/// The value must be between -1 and 1.
 		/// </summary>
-		[JsonProperty(Order = 1, Required = Required.Always)]
+		[JsonProperty(PropertyName = "directionX", Order = 1, Required = Required.Always)]
 		public float DirectionX
 		{
 			get { return _directionX; }
@@ -42,7 +42,7 @@ namespace TivaCopterMonitor.Model
 		/// The Y component of the direction vector.
 		/// The value must be between -1 and 1.
 		/// </summary>
-		[JsonProperty(Order = 2, Required = Required.Always)]
+		[JsonProperty(PropertyName = "directionY", Order = 2, Required = Required.Always)]
 		public float DirectionY
 		{
 			get { return _directionY; }
@@ -53,7 +53,7 @@ namespace TivaCopterMonitor.Model
 		/// The orientation of quadricopter around z axis.
 		/// The value must be between -PI and PI.
 		/// </summary>
-		[JsonProperty(Order = 3)]
+		[JsonProperty(PropertyName = "yaw", Order = 3)]
 		public float Yaw
 		{
 			get { return _yaw; }
@@ -63,7 +63,7 @@ namespace TivaCopterMonitor.Model
 		/// </summary>
 		/// Klaxon !
 		/// </summary>
-		[JsonProperty(Order = 4)]
+		[JsonProperty(PropertyName = "beep", Order = 4)]
 		public bool Beep { get; set; }
 
 		private static float Saturate(float val, float min, float max)
