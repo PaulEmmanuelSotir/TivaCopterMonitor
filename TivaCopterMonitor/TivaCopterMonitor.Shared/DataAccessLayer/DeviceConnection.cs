@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Devices.Enumeration;
-using System.Collections.ObjectModel;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 

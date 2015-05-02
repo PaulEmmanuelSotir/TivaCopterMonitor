@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TivaCopterMonitor.Model;
+using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Networking.Sockets;
-using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Storage.Streams;
-using Newtonsoft.Json;
-using TivaCopterMonitor.Model;
-using System.Reflection;
 
 namespace TivaCopterMonitor.DataAccessLayer
 {
