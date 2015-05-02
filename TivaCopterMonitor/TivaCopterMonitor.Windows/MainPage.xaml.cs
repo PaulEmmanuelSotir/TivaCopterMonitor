@@ -27,9 +27,19 @@ namespace TivaCopterMonitor
 			await _tivaCopterVM?.RefreshBluetoothDevices();
 		}
 
-		private void Page_Loaded(object sender, RoutedEventArgs e)
+		private void Page_Loaded(object sender, RoutedEventArgs args)
 		{
-			BluetoothDevicesSource.Source = _tivaCopterVM?.BluetoothPairedDevices;
+			if(_tivaCopterVM != null)
+			{
+				BluetoothDevicesSource.Source = _tivaCopterVM.BluetoothPairedDevices;
+				ControlsSettingSource.Source = _tivaCopterVM.ControlMap?.DataMap;
+				_tivaCopterVM.PropertyChanged += new PropertyChangedEventHandler((s, e) =>
+				{
+					if (e.PropertyName == nameof(_tivaCopterVM.ControlMap))
+						ControlsSettingSource.Source = _tivaCopterVM.ControlMap?.DataMap;
+				});
+			}
+			
 
 			MoonFall.Begin();
 		}

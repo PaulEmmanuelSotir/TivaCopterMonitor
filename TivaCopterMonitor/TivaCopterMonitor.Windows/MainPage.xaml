@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:Name="MainPageControl"
 	x:Class="TivaCopterMonitor.MainPage"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -14,6 +14,7 @@
 		<Converters:AddScaleConverter x:Key="OppositeConverter" Factor="-1" IsParameterOffset="true"/>
 
 		<CollectionViewSource x:Name="BluetoothDevicesSource"/>
+		<CollectionViewSource x:Name="ControlsSettingSource"/>
 
 		<SolidColorBrush x:Key="ApplicationForegroundThemeBrush" Color="#7F434D6A"/>
 		<SolidColorBrush x:Key="ApplicationDarkForegroundThemeBrush" Color="#F2434D6A"/>
@@ -76,7 +77,7 @@
 					</EasingDoubleKeyFrame.EasingFunction>
 				</EasingDoubleKeyFrame>
 			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Content">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentGrid">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:1.8" Value="0"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:2.3" Value="1">
@@ -204,8 +205,9 @@
 		</Grid>
 
 
+		<!-- Content -->
 		<ScrollViewer Grid.Row="1" Grid.RowSpan="2" VerticalScrollMode="Disabled" HorizontalScrollMode="Auto" ZoomMode="Disabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-			<Grid x:Name="Content" Margin="80,0,0,20">
+			<Grid x:Name="ContentGrid" Margin="80,0,0,20">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*"/>
 					<RowDefinition Height="*"/>
@@ -216,7 +218,6 @@
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="350"/>
 					<ColumnDefinition Width="370"/>
-					<ColumnDefinition Width="700"/>
 					<ColumnDefinition Width="1200"/>
 				</Grid.ColumnDefinitions>
 
@@ -554,126 +555,195 @@
 							</Grid>
 						</Viewbox>
 
-						<TextBlock Grid.Row="3" Text="Stabilization PID" Style="{StaticResource TitleTextBlockStyle}"/>
-						<TextBlock Grid.Row="4" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
-							<Run Text="YawOut = "/>
-							<Run Text="{Binding YawOut, FallbackValue=0.0}"/>
-							<Run Text="	PitchOut = "/>
-							<Run Text="{Binding PitchOut, FallbackValue=0.0}"/>
-							<Run Text="	RollOut = "/>
-							<Run Text="{Binding RollOut, FallbackValue=0.0}"/>
-						</TextBlock>
+						<Border Grid.Row="3" Margin="0,0,0,10" Background="#7F000000" Padding="10,10,10,0">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition/>
+								</Grid.RowDefinitions>
+								<TextBlock Text="Stabilization PID" Style="{StaticResource TitleTextBlockStyle}"/>
+								<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,20">
+									<Run Text="YawOut = "/>
+									<Run Text="{Binding YawOut, FallbackValue=0.0}"/>
+									<Run Text="	PitchOut = "/>
+									<Run Text="{Binding PitchOut, FallbackValue=0.0}"/>
+									<Run Text="	RollOut = "/>
+									<Run Text="{Binding RollOut, FallbackValue=0.0}"/>
+								</TextBlock>
+							</Grid>
+						</Border>
+
 					</Grid>
 				</Border>
 
 				<!-- Sensors -->
 				<Border DataContext="{Binding Sensors}" Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource ContentBorderStyle}">
-					<StackPanel Margin="0,0,0,10">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
 						<TextBlock Text="Sensors" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,20"/>
+						<Border Grid.Row="1" Margin="0,0,0,10" Background="#7F000000" Padding="10,10,10,0">
+							<StackPanel>
+								<TextBlock Text="Accelerometer" Style="{StaticResource TitleTextBlockStyle}"/>
+								<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
+										<Run Text="ax = "/>
+										<Run Text="{Binding ax, FallbackValue=0.0}"/>
+										<Run Text="	ay = "/>
+										<Run Text="{Binding ay, FallbackValue=0.0}"/>
+										<Run Text="	az = "/>
+										<Run Text="{Binding az, FallbackValue=0.0}"/>
+								</TextBlock>
 
-						<Grid Grid.Row="1" Margin="0,0,0,10">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition />
-							</Grid.RowDefinitions>
-							<TextBlock Text="Accelerometer" Style="{StaticResource TitleTextBlockStyle}"/>
-							<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
-							<Run Text="ax = "/>
-							<Run Text="{Binding ax, FallbackValue=0.0}"/>
-							<Run Text="	ay = "/>
-							<Run Text="{Binding ay, FallbackValue=0.0}"/>
-							<Run Text="	az = "/>
-							<Run Text="{Binding az, FallbackValue=0.0}"/>
-							</TextBlock>
-						</Grid>
+								<TextBlock Text="Gyroscope" Style="{StaticResource TitleTextBlockStyle}" Margin="0,10,0,0"/>
+								<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
+										<Run Text="gx = "/>
+										<Run Text="{Binding gx, FallbackValue=0.0}"/>
+										<Run Text="	gy = "/>
+										<Run Text="{Binding gy, FallbackValue=0.0}"/>
+										<Run Text="	gz = "/>
+										<Run Text="{Binding gz, FallbackValue=0.0}"/>
+								</TextBlock>
 
-						<Grid Grid.Row="2" Margin="0,0,0,10">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition />
-							</Grid.RowDefinitions>
-							<TextBlock Text="Gyroscope" Style="{StaticResource TitleTextBlockStyle}"/>
-							<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
-							<Run Text="gx = "/>
-							<Run Text="{Binding gx, FallbackValue=0.0}"/>
-							<Run Text="	gy = "/>
-							<Run Text="{Binding gy, FallbackValue=0.0}"/>
-							<Run Text="	gz = "/>
-							<Run Text="{Binding gz, FallbackValue=0.0}"/>
-							</TextBlock>
-						</Grid>
-
-						<Grid Grid.Row="3" Margin="0,0,0,10">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition />
-							</Grid.RowDefinitions>
-							<TextBlock Text="Magnetometer" Style="{StaticResource TitleTextBlockStyle}"/>
-							<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
-							<Run Text="mx = "/>
-							<Run Text="{Binding mx, FallbackValue=0.0}"/>
-							<Run Text="	my = "/>
-							<Run Text="{Binding my, FallbackValue=0.0}"/>
-							<Run Text="	mz = "/>
-							<Run Text="{Binding mz, FallbackValue=0.0}"/>
-							</TextBlock>
-						</Grid>
-					</StackPanel>
+								<TextBlock Text="Magnetometer" Style="{StaticResource TitleTextBlockStyle}" Margin="0,10,0,0"/>
+								<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,20">
+										<Run Text="mx = "/>
+										<Run Text="{Binding mx, FallbackValue=0.0}"/>
+										<Run Text="	my = "/>
+										<Run Text="{Binding my, FallbackValue=0.0}"/>
+										<Run Text="	mz = "/>
+										<Run Text="{Binding mz, FallbackValue=0.0}"/>
+								</TextBlock>
+							</StackPanel>
+						</Border>
+					</Grid>
 				</Border>
 
-				<!-- Radio -->
-				<Border DataContext="{Binding Radio}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource ContentBorderStyle}">
-					<StackPanel>
-						<TextBlock Text="Radio" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,20"/>
+				<!-- Remote control -->
+				<Border x:Name="RemoteControlBorder" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" Style="{StaticResource ContentBorderStyle}" Margin="20,0,20,20">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
 
-						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
+						<TextBlock Text="Remote Control" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,10"/>
+						
+						<!-- Bluetooth remote control setting -->
+						<TextBlock Grid.Row="1" Text="Bluetooth Controls setting" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,20" DataContext="{Binding ControlMap}"/>
+						<Border Grid.Row="2" Background="#7F000000" Margin="0,0,0,20" Padding="10,10,10,20">
+							<ItemsControl ItemsSource="{Binding Source={StaticResource ControlsSettingSource}}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="4*"/>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="4*"/>
+											</Grid.ColumnDefinitions>
+											<TextBlock Text="{Binding Property.Name}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="1" Text="{Binding UsagePage}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="2" Text="{Binding UsageId}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+											<Button Grid.Column="3" Content="Change" Command="{Binding DataContext.ChangeControlSettingCommand, ElementName=MainPageControl}" CommandParameter="{Binding}" HorizontalAlignment="Right" Style="{StaticResource TextBlockButtonStyle}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</Border>
+						
+						<!-- Remote control JSON data input -->
+						<TextBlock Grid.Row="3" Text="Bluetooth Remote Control" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,10"/>
+						<Border Grid.Row="4" DataContext="{Binding RemoteCtrl}"  Margin="0,0,0,10" Background="#7F000000" Padding="10,10,10,0">
 							<Grid>
-								<TextBlock Text="OUTPUT 0" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding in0, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding in0, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition/>
+								</Grid.RowDefinitions>
+								<TextBlock Text="Direction" Style="{StaticResource TitleTextBlockStyle}"/>
+								<TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
+									<Run Text="X = "/>
+									<Run Text="{Binding DirectionX, FallbackValue=0.0}"/>
+									<Run Text="	Y = "/>
+									<Run Text="{Binding DirectionY, FallbackValue=0.0}"/>
+								</TextBlock>
+								<TextBlock Grid.Row="2" Text="Throttle and yaw" Style="{StaticResource TitleTextBlockStyle}"/>
+								<TextBlock Grid.Row="3" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10">
+									<Run Text="Throttle = "/>
+									<Run Text="{Binding Throttle, FallbackValue=0.0}"/>
+									<Run Text="	Yaw = "/>
+									<Run Text="{Binding Yaw, FallbackValue=0.0}"/>
+								</TextBlock>
+								<TextBlock Grid.Row="4" Text="Beep" Style="{StaticResource TitleTextBlockStyle}"/>
+								<TextBlock Grid.Row="5" Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,20">
+									<Run Text="Beep = "/>
+									<Run Text="{Binding Beep, FallbackValue=0.0}"/>
+								</TextBlock>
 							</Grid>
 						</Border>
-						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
-							<Grid>
-								<TextBlock Text="OUTPUT 1" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding in1, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding in1, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
-							</Grid>
-						</Border>
-						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
-							<Grid>
-								<TextBlock Text="OUTPUT 2" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding in2, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding in2, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
-							</Grid>
-						</Border>
-						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
-							<Grid>
-								<TextBlock Text="OUTPUT 3" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding in3, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding in3, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
-							</Grid>
-						</Border>
-						<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
-							<Grid>
-								<TextBlock Text="OUTPUT 4" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
-								<Rectangle Visibility="{Binding in4, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
-								<Rectangle Visibility="{Binding in4, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
-							</Grid>
-						</Border>
-					</StackPanel>
-				</Border>
 
-				<!-- Bluetooth Remote control -->
-				<Border Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Style="{StaticResource ContentBorderStyle}" VariableSizedWrapGrid.RowSpan="3" VariableSizedWrapGrid.ColumnSpan="2">
-					<StackPanel>
-						<TextBlock Text="Bluetooth Remote Control" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,0,10"/>
+						<!-- TODO: Add raw echo when needed/enabled -->
+						<!--DataContext="{Binding RawEcho}">-->
+						<!--<TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,10" Text="{Binding rawInput}" />-->
 
-					</StackPanel>
+						<!-- Radio -->
+						<TextBlock Grid.Row="5" Text="Radio" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,20"/>
+						<Border Grid.Row="6" Margin="0,0,0,10" Background="#7F000000" Padding="10,10,10,0" VerticalAlignment="Top">
+							<Viewbox VerticalAlignment="Top" Margin="0,0,0,20">
+								<StackPanel Width="{Binding ActualWidth, ElementName=RemoteControlBorder, Mode=OneWay}">
+									<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
+										<Grid>
+											<TextBlock Text="OUTPUT 0" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+											<Rectangle Visibility="{Binding Radio.in0, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+											<Rectangle Visibility="{Binding Radio.in0, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+										</Grid>
+									</Border>
+									<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
+										<Grid>
+											<TextBlock Text="OUTPUT 1" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+											<Rectangle Visibility="{Binding Radio.in1, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+											<Rectangle Visibility="{Binding Radio.in1, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+										</Grid>
+									</Border>
+									<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
+										<Grid>
+											<TextBlock Text="OUTPUT 2" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+											<Rectangle Visibility="{Binding Radio.in2, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+											<Rectangle Visibility="{Binding Radio.in2, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+										</Grid>
+									</Border>
+									<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
+										<Grid>
+											<TextBlock Text="OUTPUT 3" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+											<Rectangle Visibility="{Binding Radio.in3, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+											<Rectangle Visibility="{Binding Radio.in3, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+										</Grid>
+									</Border>
+									<Border Margin="0,5" BorderBrush="White" BorderThickness="2">
+										<Grid>
+											<TextBlock Text="OUTPUT 4" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" Margin="10,5,0,5"/>
+											<Rectangle Visibility="{Binding Radio.in4, Converter={StaticResource BooleanToVisibilityConverter}}" Width="38" Height="38" HorizontalAlignment="Right" Fill="Green"/>
+											<Rectangle Visibility="{Binding Radio.in4, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" Width="40" Height="38" HorizontalAlignment="Right" Fill="Red"/>
+										</Grid>
+									</Border>
+								</StackPanel>
+							</Viewbox>
+						</Border>
+					</Grid>
 				</Border>
 
 				<!-- Terminal -->
-				<Border  Grid.RowSpan="4" Grid.Column="4" Style="{StaticResource ContentBorderStyle}" VariableSizedWrapGrid.RowSpan="3" VariableSizedWrapGrid.ColumnSpan="3">
+				<Border  Grid.RowSpan="4" Grid.Column="3" Style="{StaticResource ContentBorderStyle}">
 					<Grid>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto"/>
@@ -688,5 +758,30 @@
 				</Border>
 			</Grid>
 		</ScrollViewer>
+
+		<!-- Bluetooth remote control setting popup -->
+		<Popup IsOpen="{Binding IsControlsSettingPopupOpen}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200">
+			<Grid Background="{StaticResource ApplicationDarkForegroundThemeBrush}" Width="600" MaxHeight="200">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock FontSize="24.667" HorizontalAlignment="Center" Text="Move or press your gamepad's joystick or button you want to map to this control." TextWrapping="Wrap" Margin="10,20,10,40"/>
+				<Button Grid.Row="1" Content="Cancel" Command="{Binding CancelControlsSettingPopupCommand}" HorizontalAlignment="Right" Margin="0,0,20,20" VerticalAlignment="Bottom"/>
+			</Grid>
+		</Popup>
+
+		<!-- Connection failed popup -->
+		<Popup VerticalOffset="10" HorizontalOffset="200" IsOpen="{Binding IsConnectionFailedPopupOpen}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200">
+			<Grid Background="{StaticResource ApplicationDarkForegroundThemeBrush}" Width="600" MaxHeight="200">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock FontSize="24.667" HorizontalAlignment="Center"
+						   Text="Connection with TivaCopter failed."/>
+				<Button Grid.Row="1" Content="Ok" Command="{Binding OkConnectionFailedPopupCommand}" HorizontalAlignment="Center"/>
+			</Grid>
+		</Popup>
 	</Grid>
 </Page>
