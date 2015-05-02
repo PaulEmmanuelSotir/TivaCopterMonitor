@@ -31,7 +31,7 @@ namespace TivaCopterMonitor.Model
 		/// Euler angles in degrees
 		/// </summary>
 		[JsonIgnore]
-		public float YawDegree  => 180 * Yaw / (float)Math.PI;
+		public float YawDegree => 180 * Yaw / (float)Math.PI;
 		[JsonIgnore]
 		public float PitchDegree => 180 * Pitch / (float)Math.PI;
 		[JsonIgnore]
@@ -137,4 +137,11 @@ namespace TivaCopterMonitor.Model
 		[JsonProperty(Order = 4, Required = Required.Always)]
 		public bool in4 { get; set; }
 	}
+
+	public sealed class rawEcho : JSONDataSource
+	{
+		[JsonProperty(Required = Required.Always)]
+		public string rawInput { get; set; }
+	}
+
 }

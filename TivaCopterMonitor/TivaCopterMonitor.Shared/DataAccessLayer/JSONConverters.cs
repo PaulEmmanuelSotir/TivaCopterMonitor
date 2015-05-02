@@ -41,7 +41,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 			else if (jsonObject["in0"] != null)
 				return new Model.radio();
 			else if (jsonObject["ax"] != null)
-				return new Model.sensors();
+				return new Model.sensors(); 
+			else if (jsonObject["rawInput"] != null)
+				return new Model.rawEcho(); 
 
 			return null;
 		}
