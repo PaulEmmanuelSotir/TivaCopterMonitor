@@ -50,42 +50,49 @@ namespace TivaCopterMonitor.DataAccessLayer
 							// Receiving loop
 							while (_reader != null)
 							{
-								var size = await _reader.LoadAsync(sizeof(byte));
+								uint size;
+								if (_isJSONCommunicationStarted)
+									size = await _reader.LoadAsync(512);
+								else
+									size = await _reader.LoadAsync(sizeof(byte));
 
-								if (size != sizeof(byte))
+								if (size < sizeof(byte))
 								{
 									// The underlying socket was closed before we were able to read the whole data 
 									CloseDevice();
 									break;
 								}
 
-								var c = (char)_reader.ReadByte();
-
-								if (_isJSONCommunicationStarted)
+                                while (_reader.UnconsumedBufferLength > 0)
 								{
-									if (c == '\n')
+									var c = (char)_reader.ReadByte();
+
+									if (_isJSONCommunicationStarted)
 									{
-										try
+										if (c == '\n')
 										{
-											var DeserializedData = JsonConvert.DeserializeObject<JSONDataSource>(_JSONRawData.ToString(), new JsonDataSourceConverter(), new BoolConverter());
-											if (DeserializedData != null)
-												OnJSONObjectReceived?.Invoke(this, DeserializedData);
+											try
+											{
+												var DeserializedData = JsonConvert.DeserializeObject<JSONDataSource>(_JSONRawData.ToString(), new JsonDataSourceConverter(), new BoolConverter());
+												if (DeserializedData != null)
+													OnJSONObjectReceived?.Invoke(this, DeserializedData);
+											}
+											catch (Newtonsoft.Json.JsonReaderException) { }
+											finally
+											{
+												_JSONRawData.Clear();
+											}
 										}
-										catch (Newtonsoft.Json.JsonReaderException) { }
-										finally
-										{
-											_JSONRawData.Clear();
-										}
+										else
+											_JSONRawData.Append(c);
 									}
 									else
-										_JSONRawData.Append(c);
-								}
-								else
-								{
-									// TODO: correct bug: "start" don't append in _ConsoleBuffer (add a boolean 'FirstJSONObjReceived' ?)
-									// If the received data isn't JSON objects, add it to _ConsoleBuffer
-									_ConsoleBuffer.Append(c);
-								}
+									{
+										// TODO: correct bug: "start" don't append in _ConsoleBuffer (add a boolean 'FirstJSONObjReceived' ?)
+										// If the received data isn't JSON objects, add it to _ConsoleBuffer
+										_ConsoleBuffer.Append(c);
+									}
+								}								
 
 								// Notify buffer changed
 								if (!_isJSONCommunicationStarted)
@@ -170,8 +177,8 @@ namespace TivaCopterMonitor.DataAccessLayer
 			{
 				try
 				{
-					var SerializedData = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(ctrl));
-					await Send(SerializedData);
+					string SerializedData = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(ctrl, new BoolConverter()));
+					await Send($"{SerializedData}\n");
 				}
 				catch (Newtonsoft.Json.JsonSerializationException) { }
 			}
