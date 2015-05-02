@@ -15,7 +15,9 @@
 
 		<CollectionViewSource x:Name="BluetoothDevicesSource"/>
 
-		<SolidColorBrush x:Key="ApplicationForegroundThemeBrush" Color="#3F000000"/>
+		<SolidColorBrush x:Key="ApplicationForegroundThemeBrush" Color="#7F434D6A"/>
+		<SolidColorBrush x:Key="ApplicationDarkForegroundThemeBrush" Color="#F2434D6A"/>
+		<!--<SolidColorBrush x:Key="ApplicationForegroundThemeBrush" Color="#3F000000"/>-->
 
 		<Style x:Key="ContentBorderStyle" TargetType="Border">
 			<Setter Property="Background" Value="{StaticResource ApplicationForegroundThemeBrush}"/>
