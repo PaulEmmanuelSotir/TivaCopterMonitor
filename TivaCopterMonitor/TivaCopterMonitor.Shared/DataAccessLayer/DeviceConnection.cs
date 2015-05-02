@@ -178,8 +178,9 @@ namespace TivaCopterMonitor.DataAccessLayer
 				OnDeviceClose?.Invoke(this, DeviceInformation);
 
 				// This closes the handle to the device if device is disposable
-				if (_device is IDisposable)
-					(_device as IDisposable).Dispose();
+				// TODO: comprendre pourquoi disposer les device cause un exception et décommenter ça :
+		//		if (_device is IDisposable)
+		//			(_device as IDisposable).Dispose();
 
 				_device = null;
 			}

@@ -51,12 +51,34 @@ namespace TivaCopterMonitor
 
 		public void Dispose()
 		{
-			_tivaCopterVM.Dispose();
-			_tivaCopterVM = null;
-
+			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
+		private void Dispose(bool disposing)
+		{
+			if (!disposed)
+			{
+				// Dispose managed resources.
+				if (disposing)
+				{
+					_tivaCopterVM.Dispose();
+					_tivaCopterVM = null;
+				}
+
+				// Call the appropriate methods to clean upunmanaged resources here. 
+				// ...
+
+				disposed = true;
+			}
+		}
+
+		~MainPage()
+		{
+			Dispose(false);
+		}
+
+		private bool disposed = false;
 		#endregion
 
 	}

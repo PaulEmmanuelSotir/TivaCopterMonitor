@@ -218,24 +218,29 @@ namespace TivaCopterMonitor.ViewModel
 		{
 			if (!disposed)
 			{
+				// Dispose managed resources.
 				if (disposing)
 				{
-					// Dispose managed resources.
-					_hidConnection.OnDeviceConnected -= StartHidInputListening;
-					_timer.Stop();
-					_timer = null;
-
-					_bluetoothConnection.OnSocketConnected -= StartTivaCopterCommunication;
-					_bluetoothConnection.ConsoleBufferChanged -= UpdateConsoleBuffer;
-					_bluetoothConnection.OnJSONObjectReceived -= UpdateReceivedJSONObject;
-
 					if (IsControlsSettingPopupOpen)
 						CloseControlsSettingPopup();
 
 					IsConnectionFailedPopupOpen = false;
 
-					_hidConnection.Dispose();
-					_bluetoothConnection.Dispose();
+					_timer?.Stop();
+
+					if (_hidConnection != null)
+					{
+						_hidConnection.OnDeviceConnected -= StartHidInputListening;
+						_hidConnection.Dispose();
+					}
+
+					if (_bluetoothConnection != null)
+					{
+						_bluetoothConnection.OnSocketConnected -= StartTivaCopterCommunication;
+						_bluetoothConnection.ConsoleBufferChanged -= UpdateConsoleBuffer;
+						_bluetoothConnection.OnJSONObjectReceived -= UpdateReceivedJSONObject;
+						_bluetoothConnection.Dispose();
+					}
 				}
 
 				// Call the appropriate methods to clean upunmanaged resources here. 

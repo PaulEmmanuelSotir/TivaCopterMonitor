@@ -28,7 +28,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 						for (ushort id = 0; id < 255; id++)
 							_numericControls.AddRange(_hidDevice.GetNumericControlDescriptions(HidReportType.Input, page, id));
 					NumericControls = new ReadOnlyCollection<HidNumericControlDescription>(_numericControls);
-					
+
 					_hidDevice.InputReportReceived += new TypedEventHandler<HidDevice, HidInputReportReceivedEventArgs>((device, reportArgs) =>
 					{
 						Report = reportArgs.Report;
