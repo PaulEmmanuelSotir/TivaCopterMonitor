@@ -145,7 +145,7 @@ namespace TivaCopterMonitor.ViewModel
 						await stream.FlushAsync();
 						if (result.GetType() == typeof(HIDDataMap<RemoteControl>))
 							ControlMap = result as HIDDataMap<RemoteControl>;
-					}					
+					}
 				}
 				catch (FileNotFoundException e)
 				{
@@ -217,7 +217,7 @@ namespace TivaCopterMonitor.ViewModel
 				serializer.WriteObject(stream, ControlMap);
 				await stream.FlushAsync();
 			}
-        }
+		}
 
 		public async Task RefreshBluetoothDevices()
 		{

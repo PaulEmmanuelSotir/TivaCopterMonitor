@@ -22,7 +22,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		#region Properties
 
-		public Boolean IsDeviceConnected => _device != null;
+		public bool IsDeviceConnected => _device != null;
 
 		public ObservableCollection<DeviceInformation> AvailableDevices { get; private set; }
 
@@ -40,12 +40,12 @@ namespace TivaCopterMonitor.DataAccessLayer
 		/// <summary>
 		/// DeviceSelector AQS used to find this device
 		/// </summary>
-		public String DeviceSelector { get; protected set; }
+		public string DeviceSelector { get; protected set; }
 
 		/// <summary>
 		/// True if DeviceConnection will attempt to reconnect to the device once it is available to the computer again
 		/// </summary>
-		public Boolean IsEnabledAutoReconnect { get; set; }
+		public bool IsEnabledAutoReconnect { get; set; }
 
 		public TaskScheduler UITaskScheduler { get; private set; }
 
@@ -352,8 +352,8 @@ namespace TivaCopterMonitor.DataAccessLayer
 		private TypedEventHandler<DeviceWatcher, DeviceInformationUpdate> _deviceRemovedEventHandler;
 		private TypedEventHandler<DeviceAccessInformation, DeviceAccessChangedEventArgs> _deviceAccessEventHandler;
 
-		private Boolean _watcherSuspended = false;
-		private Boolean _watcherStarted = false;
+		private bool _watcherSuspended = false;
+		private bool _watcherStarted = false;
 
 		#endregion
 

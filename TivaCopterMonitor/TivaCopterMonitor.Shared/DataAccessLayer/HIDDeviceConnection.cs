@@ -48,7 +48,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 			if (deviceInfo != null)
 			{
 				// We use FileAccessMode.ReadWrite to open the device because we do not want other apps opening our device and changing the state of our device.
-				_hidDevice = await HidDevice.FromIdAsync(deviceInfo.Id, FileAccessMode.ReadWrite);
+				_hidDevice = await HidDevice.FromIdAsync(deviceInfo.Id, FileAccessMode.Read);
 			}
 			return _hidDevice;
 		}
