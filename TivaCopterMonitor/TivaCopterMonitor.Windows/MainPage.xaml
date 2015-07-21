@@ -766,21 +766,21 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
-				<TextBlock FontSize="24.667" HorizontalAlignment="Center" Text="Move or press your gamepad's joystick or button you want to map to this control." TextWrapping="Wrap" Margin="10,20,10,40"/>
-				<Button Grid.Row="1" Content="Cancel" Command="{Binding CancelControlsSettingPopupCommand}" HorizontalAlignment="Right" Margin="0,0,20,20" VerticalAlignment="Bottom"/>
+				<TextBlock FontSize="24.667" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="10,20,10,40"
+						   Text="Move or press your gamepad's joystick or button you want to map to this control."/>
+				<Button Grid.Row="1" Content="Cancel" Command="{Binding CancelControlsSettingPopupCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20"/>
 			</Grid>
 		</Popup>
 
 		<!-- Connection failed popup -->
-		<Popup VerticalOffset="10" HorizontalOffset="200" IsOpen="{Binding IsConnectionFailedPopupOpen}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200">
-			<Grid Background="{StaticResource ApplicationDarkForegroundThemeBrush}" Width="600" MaxHeight="200">
+		<Popup IsOpen="{Binding IsConnectionFailedPopupOpen}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200">
+			<Grid Background="#F26A4343" Width="600" MaxHeight="200">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
-				<TextBlock FontSize="24.667" HorizontalAlignment="Center"
-						   Text="Connection with TivaCopter failed."/>
-				<Button Grid.Row="1" Content="Ok" Command="{Binding OkConnectionFailedPopupCommand}" HorizontalAlignment="Center"/>
+				<TextBlock FontSize="24.667" HorizontalAlignment="Center" Margin="10,20,10,20" Text="Connection with TivaCopter failed."/>
+				<Button Grid.Row="1" Content="Ok" Command="{Binding OkConnectionFailedPopupCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
 			</Grid>
 		</Popup>
 	</Grid>
