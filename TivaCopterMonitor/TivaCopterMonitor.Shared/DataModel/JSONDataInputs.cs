@@ -24,7 +24,7 @@ namespace TivaCopterMonitor.Model
 		public float Throttle
 		{
 			get { return _throttle; }
-			set { _throttle = Saturate(value, 0, 1); }
+			set { _throttle = Map(value, 0, 1); }
 		}
 
 		/// <summary>
@@ -35,7 +35,7 @@ namespace TivaCopterMonitor.Model
 		public float DirectionX
 		{
 			get { return _directionX; }
-			set { _directionX = Saturate(value, -1, 1); }
+			set { _directionX = Map(value, -1, 1); }
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace TivaCopterMonitor.Model
 		public float DirectionY
 		{
 			get { return _directionY; }
-			set { _directionY = Saturate(value, -1, 1); }
+			set { _directionY = Map(value, -1, 1); }
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace TivaCopterMonitor.Model
 		public float Yaw
 		{
 			get { return _yaw; }
-			set { _yaw = Saturate(value, -(float)Math.PI, (float)Math.PI); }
+			set { _yaw = Map(value, -(float)Math.PI, (float)Math.PI); }
 		}
 
 		/// </summary>
@@ -75,6 +75,11 @@ namespace TivaCopterMonitor.Model
 		private static float Saturate(float val, float min, float max)
 		{
 			return Math.Min(Math.Max(val, min), max);
+		}
+
+		private static float Map(float val, float min, float max)
+		{
+			return Math.Min(Math.Max(val / 256f, 0f), 1f) * (max - min) + min;
 		}
 
 		private float _throttle;
