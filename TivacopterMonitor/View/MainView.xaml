@@ -1,0 +1,465 @@
+﻿<Page
+    x:Class="TivacopterMonitor.View.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TivacopterMonitor"
+	xmlns:model="using:TivaCopterMonitor.Model"
+	xmlns:DAL="using:TivaCopterMonitor.DataAccessLayer"
+	xmlns:deviceEnum="using:Windows.Devices.Enumeration"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+	<Page.Resources>
+		<CollectionViewSource x:Name="ControlsSettingSource"/>
+	</Page.Resources>
+
+	<Grid>
+		<Grid.Background>
+			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+				<GradientStop Color="White" Offset="{x:Bind ViewModel.IMU.PitchDegree, Mode=OneWay, Converter={StaticResource BackgroundHorizonConverter}, FallbackValue=0.5}"/>
+				<GradientStop Color="#FFF9F9F9" Offset="{x:Bind ViewModel.IMU.PitchDegree, Mode=OneWay, Converter={StaticResource BackgroundHorizonConverter}, FallbackValue=0.5}"/>
+			</LinearGradientBrush>
+		</Grid.Background>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="8*"/>
+		</Grid.RowDefinitions>
+
+		<!-- HEADER -->
+		<Grid x:Name="Header">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- TITLE -->
+			<TextBlock Grid.Column="0" Text="Tiva" FontSize="72" Foreground="#FFCD1D0B" FontWeight="SemiBold" Margin="40,0,0,0" VerticalAlignment="Center" FontFamily="Agency FB"/>
+			<TextBlock Grid.Column="1" Text="Copter" FontSize="72" FontFamily="Agency FB" VerticalAlignment="Center"/>
+			<TextBlock Grid.Column="2" Text=" Monitor" FontSize="72" FontFamily="Agency FB" VerticalAlignment="Center"/>
+
+			<!-- BLUETOOTH DEVICE SELECTION -->
+			<TextBlock Grid.Column="3" Text="Bluetooth device" FontSize="24" FontFamily="Agency FB" VerticalAlignment="Center"/>
+			<ComboBox Grid.Column="4" Margin="20,0,0,0" VerticalAlignment="Center"
+					  ItemsSource="{x:Bind ViewModel.BluetoothPairedDevices, Mode=OneWay}"
+					  SelectedItem="{x:Bind ViewModel.SelectedBluetoothDevice, Mode=TwoWay, Converter={StaticResource ObjectConverter}}">
+				<ComboBox.ItemTemplate>
+					<DataTemplate x:DataType="deviceEnum:DeviceInformation">
+						<TextBlock Text="{x:Bind Name}" FontFamily="Agency FB"/>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<Button Grid.Column="5" Content="Connect" Padding="12,4" Margin="20,0,40,0" Command="{x:Bind ViewModel.ConnectCommand}" FontFamily="Agency FB"/>
+		</Grid>
+
+		<!-- CONTENT -->
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Grid.Column="0" >
+				<!--#region SENSORS SECTION -->
+				<Grid Margin="20,0,0,20" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="2*"/>
+						<ColumnDefinition Width="1*"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- ACCELEROMETER -->
+					<TextBlock Grid.ColumnSpan="3" Text="ACCELEROMETER" Margin="0,0,20,0"/>
+
+					<!-- ACCEL X -->
+					<TextBlock Grid.Row="1" Text="X" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="1" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.ax, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="1" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.ax, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- ACCEL Y -->
+					<TextBlock Grid.Row="2" Text="Y" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="2" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.ay, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="2" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.ay, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- ACCEL Z -->
+					<TextBlock Grid.Row="3" Text="Z" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="3" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.az, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="3" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.az, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- GYROSCOPE -->
+					<TextBlock Grid.Row="4" Grid.ColumnSpan="3" Text="GYROSCOPE" Margin="0,0,20,0"/>
+
+					<!-- GYRO X -->
+					<TextBlock Grid.Row="5" Text="X" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="5" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.gx, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="5" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.gx, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- GYRO Y -->
+					<TextBlock Grid.Row="6" Text="Y" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="6" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.gy, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="6" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.gy, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- GYRO Z -->
+					<TextBlock Grid.Row="7" Text="Z" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="7" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.gz, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="7" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.gz, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- MAGNETOMETER -->
+					<TextBlock Grid.Row="8" Grid.ColumnSpan="3" Text="MAGNETOMETER" Margin="0,0,20,0"/>
+
+					<!-- MAGNETO X -->
+					<TextBlock Grid.Row="9" Text="X" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="9" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.mx, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="9" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.mx, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- MAGNETO Y -->
+					<TextBlock Grid.Row="10" Text="Y" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="10" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.my, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="10" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.my, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+					<!-- MAGNETO Z -->
+					<TextBlock Grid.Row="11" Text="Z" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="11" Grid.Column="1" Value="{x:Bind ViewModel.Sensors.mz, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="11" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" >
+							<Run Text="{x:Bind ViewModel.Sensors.mz, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text=" m/s"/>
+					</TextBlock>
+
+				</Grid>
+				<!--#endregion-->
+
+				<!--#region YAW SECTION-->
+				<Grid Margin="20,0,0,0" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<TextBlock Text="YAW" Margin="0,0,20,0"/>
+					<Viewbox Grid.Row="1" Width="200" Margin="20,0">
+						<Canvas Width="600" Height="600" RenderTransformOrigin="0.5,0.5">
+							<Canvas.RenderTransform>
+								<CompositeTransform Rotation="{x:Bind ViewModel.IMU.YawDegree, Mode=OneWay, FallbackValue=0, Converter={StaticResource OppositeConverter}}"/>
+							</Canvas.RenderTransform>
+							<Ellipse Canvas.Left="0" Canvas.Top="0" Width="600" Height="600" StrokeThickness="10" Stroke="Gainsboro"/>
+
+							<Rectangle Canvas.Left="290" Canvas.Top="45" Width="20" Height="110" Fill="#FFFFB900"/>
+							<Polygon Canvas.Left="275" Canvas.Top="55" Points="0,0 40,25, 0,50" Fill="#FFFFB900">
+								<Polygon.RenderTransform>
+									<CompositeTransform Rotation="-90"/>
+								</Polygon.RenderTransform>
+							</Polygon>
+							<Rectangle Canvas.Left="269.98" Canvas.Top="235.4" Width="53" Height="226" Fill="Gainsboro">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="135"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Canvas.Left="361.23" Canvas.Top="275.4" Width="53" Height="226" Fill="Gainsboro">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="-135"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Canvas.Left="225.02" Canvas.Top="336.4" Width="53" Height="214" Fill="#FFCD1D0B">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="45"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Canvas.Left="333" Canvas.Top="370" Width="53" Height="214" Fill="#FFCD1D0B">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="-45"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+
+							<Rectangle Canvas.Left="209" Canvas.Top="154" Width="182" Height="292" RadiusY="15" RadiusX="15" Fill="#FF333333"/>
+
+							<Ellipse Canvas.Left="48" Canvas.Top="48" Width="83.5" Height="83.5" Fill="Gainsboro"/>
+							<Ellipse Canvas.Left="468.5" Canvas.Top="48" Width="83.5" Height="83.5" Fill="Gainsboro"/>
+							<Ellipse Canvas.Left="48" Canvas.Top="468.5" Width="83.5" Height="83.5" Fill="#FFCD1D0B"/>
+							<Ellipse Canvas.Left="468.5" Canvas.Top="468.5" Width="83.5" Height="83.5" Fill="#FFCD1D0B"/>
+						</Canvas>
+					</Viewbox>
+					<TextBlock Grid.Row="1" FontFamily="Agency FB" Margin="40,0,0,0" >
+							<Run Text="{x:Bind ViewModel.IMU.YawDegree, FallbackValue=0.0, Mode=OneWay}"/>
+							<Run Text="°"/>
+					</TextBlock>
+				</Grid>
+				<!--#endregion-->
+
+				<!--#region RADIO SECTION -->
+				<Grid Margin="20,0,0,0" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Text="RADIO INPUTS" Margin="0,0,20,0"/>
+
+					<StackPanel Grid.Row="1" Margin="40,0,0,0" Orientation="Horizontal">
+						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+							<TextBlock Grid.Row="1" Text="in 1" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
+						</Border>
+						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+							<TextBlock Grid.Row="1" Text="in 2" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
+						</Border>
+						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+							<TextBlock Grid.Row="1" Text="in 3" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
+						</Border>
+						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+							<TextBlock Grid.Row="1" Text="in 4" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
+						</Border>
+						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+							<TextBlock Grid.Row="1" Text="in 5" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
+						</Border>
+					</StackPanel>
+				</Grid>
+				<!--#endregion-->
+			</StackPanel>
+
+			<!--#region IMU SECTION -->
+			<Border Grid.Column="1">
+
+			</Border>
+			<!--#endregion-->
+
+			<StackPanel Grid.Column="2">
+				<!--#region 3D VIEW SECTION -->
+				<Grid Margin="20,0,0,0" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<TextBlock Text="3D VIEW" Margin="0,0,20,0"/>
+					<Viewbox Grid.Row="1" Width="150" RenderTransformOrigin="0.5,0.5">
+						<Viewbox.Projection>
+							<!-- TODO: correct order of rotations -->
+							<PlaneProjection RotationX="{x:Bind ViewModel.IMU.PitchDegree, Mode=OneWay, Converter={StaticResource OppositeConverter}, ConverterParameter=-75}" RotationZ="{x:Bind ViewModel.IMU.RollDegree, Mode=OneWay, Converter={StaticResource OppositeConverter}}" RotationY="{x:Bind ViewModel.IMU.YawDegree, Mode=OneWay, Converter={StaticResource OppositeConverter}}" 
+											 GlobalOffsetX="{x:Bind ViewModel.IMU.px, Mode=OneWay}" GlobalOffsetY="{x:Bind ViewModel.IMU.py, Mode=OneWay}" GlobalOffsetZ="{x:Bind ViewModel.IMU.pz, Mode=OneWay}"/>
+						</Viewbox.Projection>
+						<Canvas Width="600" Height="600" RenderTransformOrigin="0.5,0.5">
+							<Rectangle Canvas.Left="290" Canvas.Top="45" Width="20" Height="110" Fill="#FFFFB900"/>
+							<Polygon Canvas.Left="275" Canvas.Top="55" Points="0,0 40,25, 0,50" Fill="#FFFFB900">
+								<Polygon.RenderTransform>
+									<CompositeTransform Rotation="-90"/>
+								</Polygon.RenderTransform>
+							</Polygon>
+							<Rectangle Canvas.Left="269.98" Canvas.Top="235.4" Width="53" Height="226" Fill="Gainsboro">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="135"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Canvas.Left="361.23" Canvas.Top="275.4" Width="53" Height="226" Fill="Gainsboro">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="-135"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Canvas.Left="225.02" Canvas.Top="336.4" Width="53" Height="214" Fill="#FFCD1D0B">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="45"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+							<Rectangle Canvas.Left="333" Canvas.Top="370" Width="53" Height="214" Fill="#FFCD1D0B">
+								<Rectangle.RenderTransform>
+									<CompositeTransform Rotation="-45"/>
+								</Rectangle.RenderTransform>
+							</Rectangle>
+
+							<Rectangle Canvas.Left="209" Canvas.Top="154" Width="182" Height="292" RadiusY="15" RadiusX="15" Fill="#FF333333"/>
+
+							<Ellipse Canvas.Left="48" Canvas.Top="48" Width="83.5" Height="83.5" Fill="Gainsboro"/>
+							<Ellipse Canvas.Left="468.5" Canvas.Top="48" Width="83.5" Height="83.5" Fill="Gainsboro"/>
+							<Ellipse Canvas.Left="48" Canvas.Top="468.5" Width="83.5" Height="83.5" Fill="#FFCD1D0B"/>
+							<Ellipse Canvas.Left="468.5" Canvas.Top="468.5" Width="83.5" Height="83.5" Fill="#FFCD1D0B"/>
+						</Canvas>
+					</Viewbox>
+				</Grid>
+				<!--#endregion-->
+
+				<!--#region PIDs SECTION -->
+				<Grid Margin="20,0,0,0" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="3*"/>
+						<ColumnDefinition Width="1*"/>
+					</Grid.ColumnDefinitions>
+					<!-- STABILIZATION PIDs -->
+					<TextBlock Grid.ColumnSpan="3" Text="STABILIZATION PIDs" Margin="0,0,20,0"/>
+
+					<!-- YAW PID OUT -->
+					<TextBlock Grid.Row="1" Text="Yaw PID" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="1" Grid.Column="1" Value="{x:Bind ViewModel.PID.YawOut, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="1" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" Text="{x:Bind ViewModel.PID.YawOut, FallbackValue=0.0, Mode=OneWay}"/>
+
+					<!-- YAW PID OUT -->
+					<TextBlock Grid.Row="2" Text="Roll PID" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="2" Grid.Column="1" Value="{x:Bind ViewModel.PID.RollOut, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="2" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" Text="{x:Bind ViewModel.PID.RollOut, FallbackValue=0.0, Mode=OneWay}"/>
+
+					<!-- YAW PID OUT -->
+					<TextBlock Grid.Row="3" Text="Pitch PID" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="3" Grid.Column="1" Value="{x:Bind ViewModel.PID.PitchOut, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="3" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" Text="{x:Bind ViewModel.PID.PitchOut, FallbackValue=0.0, Mode=OneWay}"/>
+
+					<!-- YAW PID OUT -->
+					<TextBlock Grid.Row="4" Text="Altitude PID" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="4" Grid.Column="1" Value="{x:Bind ViewModel.PID.AltitudeOut, FallbackValue=0.0, Mode=OneWay}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="4" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0" Text="{x:Bind ViewModel.PID.AltitudeOut, FallbackValue=0.0, Mode=OneWay}"/>
+
+				</Grid>
+				<!--#endregion-->
+
+				<!--#region MOTORS THROTTLE SECTION-->
+				<Grid Margin="20,0,0,0" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="3*"/>
+						<ColumnDefinition Width="1*"/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.ColumnSpan="3" Text="MOTORS THROTTLE" Margin="0,0,20,0"/>
+
+					<!-- MOTOR 1 -->
+					<TextBlock Grid.Row="1" Text="Motor 1" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="1" Grid.Column="1" Value="{x:Bind ViewModel.PID.Motor1, FallbackValue=0.0, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="1" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0">
+						<Run Text="{x:Bind ViewModel.PID.Motor1, FallbackValue=0.0, Mode=OneWay}"/>
+						<Run Text="%"/>
+					</TextBlock>
+
+					<!-- MOTOR 2 -->
+					<TextBlock Grid.Row="2" Text="Motor 2" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="2" Grid.Column="1" Value="{x:Bind ViewModel.PID.Motor2, FallbackValue=0.0, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="2" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0">
+						<Run Text="{x:Bind ViewModel.PID.Motor2, FallbackValue=0.0, Mode=OneWay}"/>
+						<Run Text="%"/>
+					</TextBlock>
+
+					<!-- MOTOR 3 -->
+					<TextBlock Grid.Row="3" Text="Motor 3" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="3" Grid.Column="1" Value="{x:Bind ViewModel.PID.Motor3, FallbackValue=0.0, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="3" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0">
+						<Run Text="{x:Bind ViewModel.PID.Motor3, FallbackValue=0.0, Mode=OneWay}"/>
+						<Run Text="%"/>
+					</TextBlock>
+
+					<!-- MOTOR 4 -->
+					<TextBlock Grid.Row="4" Text="Motor 4" Margin="40,0,0,0"/>
+					<ProgressBar Grid.Row="4" Grid.Column="1" Value="{x:Bind ViewModel.PID.Motor4, FallbackValue=0.0, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Margin="20,0,0,0"/>
+					<TextBlock Grid.Row="4" Grid.Column="2" FontFamily="Agency FB" Margin="20,0,0,0">
+						<Run Text="{x:Bind ViewModel.PID.Motor4, FallbackValue=0.0, Mode=OneWay}"/>
+						<Run Text="%"/>
+					</TextBlock>
+
+				</Grid>
+				<!--#endregion-->
+
+				<!--#region BLUETOOTH CONTROLS SETTINGS SECTION -->
+				<Grid Margin="20,0,0,0" Padding="20,10,0,5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<TextBlock Text="BLUETOOTH CONTROLS SETTINGS" Margin="0,0,20,0"/>
+					<ItemsControl Grid.Row="1" ItemsSource="{Binding Source={StaticResource ControlsSettingSource}}" Margin="40,0,10,0">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="4*"/>
+										<ColumnDefinition Width="1*"/>
+										<ColumnDefinition Width="1*"/>
+										<ColumnDefinition Width="4*"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Text="{Binding Property.Name}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="1" Text="{Binding UsagePage}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="2" Text="{Binding UsageId}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+									<Button Grid.Column="3" Content="Change" Command="{Binding DataContext.ChangeControlSettingCommand, ElementName=MainPageControl}" CommandParameter="{Binding}" HorizontalAlignment="Right" Style="{StaticResource TextBlockButtonStyle}"/>
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+				<!--#endregion-->
+			</StackPanel>
+		</Grid>
+
+		<!-- Bluetooth remote control setting popup -->
+		<Popup IsOpen="{x:Bind ViewModel.IsControlsSettingPopupOpen, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200" RequestedTheme="Dark">
+			<Grid Background="#B3B6B6B6" Width="600" MaxHeight="200">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock FontSize="24.667" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="10,20,10,40"
+						   Text="Move or press your gamepad's joystick or button you want to map to this control."/>
+				<Button Grid.Row="1" Content="Cancel" Command="{x:Bind ViewModel.CancelControlsSettingPopupCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20"/>
+			</Grid>
+		</Popup>
+
+		<!-- Connection failed popup -->
+		<Popup IsOpen="{x:Bind ViewModel.IsConnectionFailedPopupOpen, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200" RequestedTheme="Dark">
+			<Grid Background="#F26A4343" Width="600" MaxHeight="200">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<TextBlock FontSize="24.667" HorizontalAlignment="Center" Margin="10,20,10,20" Text="Connection with TivaCopter failed."/>
+				<Button Grid.Row="1" Content="Ok" Command="{x:Bind ViewModel.OkConnectionFailedPopupCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" RequestedTheme="Dark"/>
+			</Grid>
+		</Popup>
+	</Grid>
+</Page>

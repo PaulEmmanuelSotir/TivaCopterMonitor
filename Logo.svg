@@ -13,9 +13,9 @@
    height="297mm"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91pre1_64bit "
+   inkscape:version="0.91 r13725"
    viewBox="0 0 744.09447 1052.3622"
-   sodipodi:docname="logo.svg">
+   sodipodi:docname="Logo.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,18 +25,24 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="186.26896"
-     inkscape:cy="763.77178"
+     inkscape:zoom="0.35"
+     inkscape:cx="-384.11149"
+     inkscape:cy="794.95278"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      showguides="false"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
-     inkscape:window-x="1912"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:bbox-paths="true"
+     inkscape:snap-global="false" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -58,8 +64,8 @@
        id="rect4201"
        width="2617.4854"
        height="780.68903"
-       x="-907.43896"
-       y="-30.705753"
+       x="-939.81982"
+       y="7.4829502"
        ry="14.542534" />
     <g
        id="g4191"
@@ -354,6 +360,225 @@
          width="30"
          id="rect4361-1"
          style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:14.23339844;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="D:\Programation\WinRT\TivacopterMonitor\TivacopterMonitor\Assets\SplashScreen.scale-100.png"
+       transform="translate(-631.80282,447.78771)"
+       id="g4336">
+      <g
+         transform="matrix(3.3163879,0,0,3.3163879,-178.19812,-276.86556)"
+         id="g4338">
+        <g
+           id="g4340"
+           transform="matrix(1.0833674,0,0,1.0833674,-9.7675839,-34.445452)">
+          <text
+             sodipodi:linespacing="125%"
+             id="text4342"
+             y="258.61511"
+             x="111.09711"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:34.73792267px;line-height:125%;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';letter-spacing:0px;word-spacing:0px;fill:#cd1d0b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="258.61511"
+               x="111.09711"
+               id="tspan4344"
+               sodipodi:role="line"><tspan
+   id="tspan4346"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:50px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'">T</tspan>iva</tspan></text>
+          <text
+             sodipodi:linespacing="125%"
+             id="text4348"
+             y="259.27429"
+             x="165.88037"
+             style="font-style:normal;font-weight:bold;font-size:34.73792267px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#282828;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="259.27429"
+               x="165.88037"
+               id="tspan4350"
+               sodipodi:role="line"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'"><tspan
+   id="tspan4352"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:50px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';fill:#282828;fill-opacity:1">C</tspan>opter</tspan></text>
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:39.89155197px;line-height:125%;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Condensed';letter-spacing:0px;word-spacing:0px;fill:#282828;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="116.41755"
+           y="288.38437"
+           id="text4354"
+           sodipodi:linespacing="125%"
+           transform="scale(1.0133445,0.98683124)"><tspan
+             sodipodi:role="line"
+             id="tspan4356"
+             x="116.41755"
+             y="288.38437"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Condensed';fill:#282828;fill-opacity:1">&gt;Monitor</tspan></text>
+      </g>
+      <rect
+         rx="2578.218"
+         ry="1058.5366"
+         y="383.8638"
+         x="135.20827"
+         height="300"
+         width="620"
+         id="rect4358"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:10;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="D:\Programation\WinRT\TivacopterMonitor\TivacopterMonitor\Assets\Logo.scale-100.png"
+       id="g4382"
+       transform="matrix(5.0000001,0,0,5.0000001,-1847.092,-468.67521)">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:14.23339844;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4408"
+         width="30"
+         height="30"
+         x="397.45508"
+         y="282.74301"
+         ry="0" />
+      <g
+         transform="matrix(0.18344301,0,0,0.18344301,377.97192,252.89825)"
+         id="g4338-6">
+        <g
+           id="g4340-8"
+           transform="matrix(1.0833674,0,0,1.0833674,-9.7675839,-34.445452)">
+          <text
+             sodipodi:linespacing="125%"
+             id="text4342-7"
+             y="258.61511"
+             x="111.09711"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:34.73792267px;line-height:125%;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';letter-spacing:0px;word-spacing:0px;fill:#cd1d0b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="258.61511"
+               x="111.09711"
+               id="tspan4344-0"
+               sodipodi:role="line"><tspan
+   id="tspan4346-8"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:50px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'">T</tspan>iva</tspan></text>
+          <text
+             sodipodi:linespacing="125%"
+             id="text4348-6"
+             y="259.27429"
+             x="165.88037"
+             style="font-style:normal;font-weight:bold;font-size:34.73792267px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#282828;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="259.27429"
+               x="165.88037"
+               id="tspan4350-8"
+               sodipodi:role="line"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'"><tspan
+   id="tspan4352-0"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:50px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';fill:#282828;fill-opacity:1">C</tspan>opter</tspan></text>
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:39.89155197px;line-height:125%;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Condensed';letter-spacing:0px;word-spacing:0px;fill:#282828;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="116.41755"
+           y="288.38437"
+           id="text4354-2"
+           sodipodi:linespacing="125%"
+           transform="scale(1.0133445,0.98683124)"><tspan
+             sodipodi:role="line"
+             id="tspan4356-5"
+             x="116.41755"
+             y="288.38437"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Condensed';fill:#282828;fill-opacity:1">&gt;Monitor</tspan></text>
+      </g>
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="D:\Programation\WinRT\TivacopterMonitor\TivacopterMonitor\Assets\StoreLogo.scale-100.png"
+       id="g4410"
+       transform="matrix(1.6666667,0,0,1.6666667,-325.90783,529.91587)">
+      <g
+         id="g4559"
+         transform="matrix(0.43031042,0,0,0.43031042,243.8551,163.23965)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:20.71104622px;line-height:125%;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';letter-spacing:0px;word-spacing:0px;fill:#cd1d0b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="366.0556"
+           y="308.77551"
+           id="text4342-7-7"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4344-0-5"
+             x="366.0556"
+             y="308.77551"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:29.81042671px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'"
+   id="tspan4346-8-7">T</tspan>iva</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:bold;font-size:20.71104622px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#282828;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="365.05124"
+           y="335.41852"
+           id="text4348-6-2"
+           sodipodi:linespacing="125%"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'"
+             sodipodi:role="line"
+             id="tspan4350-8-0"
+             x="365.05124"
+             y="335.41852"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:29.81042671px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';fill:#282828;fill-opacity:1"
+   id="tspan4352-0-7">C</tspan>opter</tspan></text>
+      </g>
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.59999996;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4432"
+         width="30"
+         height="30"
+         x="397.45508"
+         y="282.74301"
+         ry="0" />
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="D:\Programation\WinRT\TivacopterMonitor\TivacopterMonitor\Assets\SmallLogo.scale-100.png"
+       id="g4410-7"
+       transform="translate(38.65053,739.96246)">
+      <g
+         id="g4559-9"
+         transform="matrix(0.43031042,0,0,0.43031042,243.8551,163.23965)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:20.71104622px;line-height:125%;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';letter-spacing:0px;word-spacing:0px;fill:#cd1d0b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="366.0556"
+           y="308.77551"
+           id="text4342-7-7-9"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4344-0-5-4"
+             x="366.0556"
+             y="308.77551"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:29.81042671px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'"
+   id="tspan4346-8-7-2">T</tspan>iva</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:bold;font-size:20.71104622px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#282828;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="365.05124"
+           y="335.41852"
+           id="text4348-6-2-8"
+           sodipodi:linespacing="125%"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed'"
+             sodipodi:role="line"
+             id="tspan4350-8-0-6"
+             x="365.05124"
+             y="335.41852"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:29.81042671px;font-family:'Agency FB';-inkscape-font-specification:'Agency FB Bold Condensed';fill:#282828;fill-opacity:1"
+   id="tspan4352-0-7-2">C</tspan>opter</tspan></text>
+      </g>
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.59999996;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4432-0"
+         width="30"
+         height="30"
+         x="397.45508"
+         y="282.74301"
+         ry="0" />
     </g>
   </g>
 </svg>

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  IgnorableNamespaces="uap mp">
+
+	<Identity
+    Name="98be923d-92f3-4426-95dc-59a87a484ba3"
+    Publisher="CN=paule"
+    Version="1.0.0.0" />
+
+	<mp:PhoneIdentity PhoneProductId="98be923d-92f3-4426-95dc-59a87a484ba3" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+	<Properties>
+		<DisplayName>TivacopterMonitor</DisplayName>
+		<PublisherDisplayName>paulemmanuel</PublisherDisplayName>
+		<Logo>Assets\StoreLogo.png</Logo>
+	</Properties>
+
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10158.0" MaxVersionTested="10.0.10158.0" />
+	</Dependencies>
+
+	<Resources>
+		<Resource Language="x-generate"/>
+	</Resources>
+
+	<Applications>
+		<Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="TivacopterMonitor.App">
+			<uap:VisualElements
+        DisplayName="TivacopterMonitor"
+        Square150x150Logo="Assets\Logo.png"
+        Square44x44Logo="Assets\SmallLogo.png"
+        Description="TivacopterMonitor"
+        BackgroundColor="#FFFFFF">
+				<uap:SplashScreen Image="Assets\SplashScreen.png" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+
+	<Capabilities>
+		<Capability Name="internetClient"/>
+		<DeviceCapability Name="bluetooth"/>
+		<DeviceCapability Name="humaninterfacedevice">
+			<Device Id="any">
+				<Function Type="usage:0001 0004" />
+				<Function Type="usage:0001 0005" />
+			</Device>
+		</DeviceCapability>
+	</Capabilities>
+</Package>

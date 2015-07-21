@@ -1,0 +1,32 @@
+﻿<Application
+    x:Class="TivacopterMonitor.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TivacopterMonitor"
+	xmlns:converters="using:TivaCopterMonitor.Converters"
+    RequestedTheme="Light">
+
+	<Application.Resources>
+		<ResourceDictionary>
+
+			<!-- APP NAME -->
+			<x:String x:Key="AppName">Tivacopter monitor</x:String>
+
+			<!--#region CONVERTERS -->
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+			<converters:AddScaleConverter x:Key="ScaleConverter" IsParameterOffset="false"/>
+			<converters:AddScaleConverter x:Key="BackgroundHorizonConverter" Factor="0.01111" Offset="0.5"/>
+			<converters:AddScaleConverter x:Key="PercentageConverter" Factor="100" IsParameterOffset="true"/>
+			<converters:AddScaleConverter x:Key="OppositeConverter" Factor="-1" IsParameterOffset="true"/>
+			<converters:ObjectConverter x:Key="ObjectConverter"/>
+			<!--#endregion-->
+
+			<!--#region APP COLORS -->
+			<!--...-->
+			<!--#endregion-->
+
+		</ResourceDictionary>
+	</Application.Resources>
+
+
+</Application>
