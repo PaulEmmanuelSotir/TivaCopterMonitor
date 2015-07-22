@@ -98,8 +98,9 @@ namespace TivaCopterMonitor.ViewModel
 			 });
 
 			_bluetoothConnection.OnSocketConnected += StartTivaCopterCommunication;
+			_bluetoothConnection.OnSocketClose += BluetoothSocketClosed;
+			_bluetoothConnection.OnSocketFailed += BluetoothSocketFailed;
 			_bluetoothConnection.OnJSONObjectReceived += UpdateReceivedJSONObject;
-			_bluetoothConnection.OnDeviceClose += BluetoothDeviceClosed;
 		}
 
 		#region Methods
@@ -126,7 +127,7 @@ namespace TivaCopterMonitor.ViewModel
 
 		public async void StartTivaCopterCommunication(BluetoothDeviceConnection connection, DeviceInformation deviceInfo)
 		{
-			IsCopterConnected = true;
+			OnPropertyChanged(nameof(IsCopterConnected));
 
 			// TODO: let user choose the HID device
 			await _hidConnection.EnumerateDevicesAsync();
@@ -192,7 +193,7 @@ namespace TivaCopterMonitor.ViewModel
 				RawEcho = dataSource as rawEcho;
 		}
 
-		public void CloseControlsSettingPopup(DeviceConnection connection = null, Object arg = null)
+		public void CloseControlsSettingPopup(DeviceConnection connection = null, object arg = null)
 		{
 			IsControlsSettingPopupOpen = false;
 			_waitingHIDToControlBinding = null;
@@ -200,9 +201,14 @@ namespace TivaCopterMonitor.ViewModel
 			_hidConnection.OnDeviceClose -= CloseControlsSettingPopup;
 		}
 
-		public void BluetoothDeviceClosed(DeviceConnection conn, DeviceInformation deviceInfo)
+		public void BluetoothSocketFailed(DeviceConnection conn, DeviceInformation deviceInfo)
 		{
-			IsCopterConnected = false;
+			IsConnectionFailedPopupOpen = true;
+		}
+
+		public void BluetoothSocketClosed(DeviceConnection conn, DeviceInformation deviceInfo)
+		{
+			OnPropertyChanged(nameof(IsCopterConnected));
 		}
 
 		/// <summary>
@@ -258,7 +264,8 @@ namespace TivaCopterMonitor.ViewModel
 					{
 						_bluetoothConnection.OnSocketConnected -= StartTivaCopterCommunication;
 						_bluetoothConnection.OnJSONObjectReceived -= UpdateReceivedJSONObject;
-						_bluetoothConnection.OnDeviceClose -= BluetoothDeviceClosed;
+						_bluetoothConnection.OnSocketClose -= BluetoothSocketClosed;
+						_bluetoothConnection.OnSocketFailed -= BluetoothSocketFailed;
 						_bluetoothConnection.Dispose();
 					}
 				}
@@ -280,8 +287,7 @@ namespace TivaCopterMonitor.ViewModel
 
 		public bool IsCopterConnected
 		{
-			get { return _isCopterConnected; }
-			protected set { _isCopterConnected = value; OnPropertyChanged(); }
+			get { return _bluetoothConnection.IsSocketConnected; }
 		}
 
 		public bool IsConnectionFailedPopupOpen
@@ -352,7 +358,6 @@ namespace TivaCopterMonitor.ViewModel
 
 		protected BluetoothDeviceConnection _bluetoothConnection;
 		private bool _isConnectionFailedPopupOpen;
-		private bool _isCopterConnected;
 
 		private IMU _IMU;
 		private PID _PID;

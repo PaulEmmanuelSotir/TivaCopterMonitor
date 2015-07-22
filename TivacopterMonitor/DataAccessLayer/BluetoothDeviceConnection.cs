@@ -36,6 +36,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 						{
 							if (task.Status != TaskStatus.RanToCompletion)
 							{
+								OnSocketFailed?.Invoke(this, deviceInfo);
 								CloseDevice();
 								return;
 							}
@@ -64,7 +65,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 							// String builder storing the last received JSON string.
 							StringBuilder _JSONRawData = new StringBuilder();
 
-							_isSocketConnected = true;
+							IsSocketConnected = true;
 							OnSocketConnected?.Invoke(this, deviceInfo);
 
 							// Receiving loop
@@ -139,7 +140,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 				_writer?.Dispose();
 				_writer = null;
 
-				_isSocketConnected = false;
+				IsSocketConnected = false;
 				_socket?.Dispose();
 				_socket = null;
 				OnSocketClose?.Invoke(this, deviceInfo);
@@ -153,12 +154,15 @@ namespace TivaCopterMonitor.DataAccessLayer
 		public event TypedEventHandler<BluetoothDeviceConnection, JSONDataSource> OnJSONObjectReceived;
 		public event TypedEventHandler<BluetoothDeviceConnection, DeviceInformation> OnSocketConnected;
 		public event TypedEventHandler<BluetoothDeviceConnection, DeviceInformation> OnSocketClose;
+		public event TypedEventHandler<BluetoothDeviceConnection, DeviceInformation> OnSocketFailed;
 		public event EventHandler ConsoleBufferChanged;
 
 		///<summary>
 		/// Stores received data from bluetooth device except JSON objects.
 		///</summary>
 		public string ConsoleBuffer => _ConsoleBuffer.ToString();
+
+		public bool IsSocketConnected { get; private set; }
 
 		public void AbortConnection()
 		{
@@ -168,7 +172,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		private async Task Send(string str)
 		{
-			if (_isSocketConnected && IsDeviceConnected)
+			if (IsSocketConnected && IsDeviceConnected)
 			{
 				_writer.WriteString(str);
 				await _writer.StoreAsync();
@@ -178,7 +182,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		private async Task Send(Command cmd, params object[] args)
 		{
-			if (_isSocketConnected && IsDeviceConnected && !_isJSONCommunicationStarted)
+			if (IsSocketConnected && IsDeviceConnected && !_isJSONCommunicationStarted)
 			{
 				string str = cmd.ToString();
 				foreach (var arg in args)
@@ -193,7 +197,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 
 		public async Task Send(JSONDataInput ctrl)
 		{
-			if (_isSocketConnected && IsDeviceConnected && _isJSONCommunicationStarted)
+			if (IsSocketConnected && IsDeviceConnected && _isJSONCommunicationStarted)
 			{
 				try
 				{
@@ -316,7 +320,5 @@ namespace TivaCopterMonitor.DataAccessLayer
 		private DataWriter _writer;
 		private DataReader _reader;
 		private StringBuilder _ConsoleBuffer;
-
-		private bool _isSocketConnected;
 	}
 }

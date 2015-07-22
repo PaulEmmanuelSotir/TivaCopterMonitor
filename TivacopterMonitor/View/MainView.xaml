@@ -446,7 +446,7 @@
 
 		<!-- Connection failed popup -->
 		<Popup IsOpen="{x:Bind ViewModel.IsConnectionFailedPopupOpen, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="3" Width="600" Height="200" RequestedTheme="Dark">
-			<Grid Background="#F26A4343" Width="600" MaxHeight="200">
+			<Grid Background="#F2742121" Width="600" MaxHeight="200">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
