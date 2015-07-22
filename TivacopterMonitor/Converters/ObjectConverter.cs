@@ -32,7 +32,7 @@ namespace TivaCopterMonitor.Converters
 		/// <returns>The value to be passed to the source object.</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, string language)
 		{
-			if (value.GetType() == targetType)
+			if (value?.GetType() == targetType)
 				return value;
 			return null;
 		}
