@@ -1,25 +1,28 @@
 ﻿using System;
 using System.ComponentModel;
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using TivaCopterMonitor.ViewModel;
+using Windows.UI.Popups;
+using System.Threading.Tasks;
 
 namespace TivacopterMonitor.View
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainView : Page, IDisposable
+	/// <summary>
+	/// An empty page that can be used on its own or navigated to within a Frame.
+	/// </summary>
+	public sealed partial class MainView : Page, IDisposable
 	{
-        public MainView()
-        {
-            InitializeComponent();
+		public MainView()
+		{
+			InitializeComponent();
 
 			ViewModel = new TivaCopterViewModel();
 			DataContext = ViewModel;
 		}
+
+		public TivaCopterViewModel ViewModel { get; private set; }
 
 		/// <summary>
 		/// Invoked when this page is about to be displayed in a Frame.
@@ -28,10 +31,36 @@ namespace TivacopterMonitor.View
 		/// property is typically used to configure the page.</param>
 		protected async override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			await ViewModel?.RefreshBluetoothDevices();
+			await ViewModel.EnumerateBluetoothDevicesAsync();
 		}
 
-		public TivaCopterViewModel ViewModel { get; private set; }
+		private void Page_Loaded(object sender, RoutedEventArgs e)
+		{
+			if (ViewModel != null)
+			{
+				ControlsSettingSource.Source = ViewModel.ControlMap?.DataMap;
+				ViewModel.PropertyChanged += new PropertyChangedEventHandler((s, arg) =>
+				{
+					if (arg.PropertyName == nameof(ViewModel.ControlMap))
+						ControlsSettingSource.Source = ViewModel.ControlMap?.DataMap;
+				});
+			}
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			Task enumertate = ViewModel.EnumerateBluetoothDevicesAsync();
+			ConnectionMenuFlyout.Items.Clear();
+
+			foreach (var deviceInfo in ViewModel.BluetoothPairedDevices)
+			{
+				var deviceMenuItem = new MenuFlyoutItem();
+				deviceMenuItem.Text = deviceInfo.Name;
+				deviceMenuItem.Command = ViewModel.ConnectToBluetoothDeviceCommand;
+				deviceMenuItem.CommandParameter = deviceInfo;
+				ConnectionMenuFlyout.Items.Add(deviceMenuItem);
+			}
+		}
 
 		#region IDisposable
 
@@ -65,19 +94,6 @@ namespace TivacopterMonitor.View
 		}
 
 		private bool disposed = false;
-
-		private void Page_Loaded(object sender, RoutedEventArgs e)
-		{
-			if (ViewModel != null)
-			{
-				ControlsSettingSource.Source = ViewModel.ControlMap?.DataMap;
-				ViewModel.PropertyChanged += new PropertyChangedEventHandler((s, arg) =>
-				{
-					if (arg.PropertyName == nameof(ViewModel.ControlMap))
-						ControlsSettingSource.Source = ViewModel.ControlMap?.DataMap;
-				});
-			}
-		}
 
 		#endregion
 

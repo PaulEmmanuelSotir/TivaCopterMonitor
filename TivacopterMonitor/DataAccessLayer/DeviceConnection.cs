@@ -132,8 +132,6 @@ namespace TivaCopterMonitor.DataAccessLayer
 				UnregisterFromAppEvents();
 
 			DeviceInformation = null;
-			OnDeviceConnected = null;
-			OnDeviceClose = null;
 
 			// TODO avant la ligne était : "IsEnabledAutoReconnect = true;", comprendre pourquoi!
 			IsEnabledAutoReconnect = false;

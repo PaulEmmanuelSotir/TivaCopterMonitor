@@ -40,6 +40,20 @@ namespace TivaCopterMonitor.DataAccessLayer
 								return;
 							}
 
+							// Check whether if the connection is lost on UI thread.
+							// (DeviceConnection's DeviceWatcher is only watching for device pairing but we need to be connected to the bluetooth device)
+							// TODO: detect connection lost manually because '_service.Device.ConnectionStatusChanged' is too long to fire.
+							_service.Device.ConnectionStatusChanged += new TypedEventHandler<Windows.Devices.Bluetooth.BluetoothDevice, object>((device, arg) =>
+							{
+								Task.Factory.StartNew(() =>
+								{
+									if (_service?.Device == null)
+										CloseDevice();
+									else if (_service.Device.ConnectionStatus == Windows.Devices.Bluetooth.BluetoothConnectionStatus.Disconnected)
+										CloseDevice();
+								}, new System.Threading.CancellationToken(), TaskCreationOptions.None, UITaskScheduler);
+							});
+
 							_writer = new DataWriter(_socket.OutputStream);
 							_writer.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
 
@@ -144,7 +158,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 		///<summary>
 		/// Stores received data from bluetooth device except JSON objects.
 		///</summary>
-		public String ConsoleBuffer => _ConsoleBuffer.ToString();
+		public string ConsoleBuffer => _ConsoleBuffer.ToString();
 
 		public void AbortConnection()
 		{
@@ -152,7 +166,7 @@ namespace TivaCopterMonitor.DataAccessLayer
 				_connectAction?.Cancel();
 		}
 
-		private async Task Send(String str)
+		private async Task Send(string str)
 		{
 			if (_isSocketConnected && IsDeviceConnected)
 			{

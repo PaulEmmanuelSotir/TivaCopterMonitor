@@ -1,14 +1,15 @@
 ﻿<Page
-    x:Class="TivacopterMonitor.View.MainView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TivacopterMonitor"
+	x:Class="TivacopterMonitor.View.MainView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:TivacopterMonitor"
 	xmlns:model="using:TivaCopterMonitor.Model"
 	xmlns:DAL="using:TivaCopterMonitor.DataAccessLayer"
 	xmlns:deviceEnum="using:Windows.Devices.Enumeration"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Loaded="Page_Loaded">
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	Loaded="Page_Loaded">
 	<Page.Resources>
 		<CollectionViewSource x:Name="ControlsSettingSource"/>
 	</Page.Resources>
@@ -32,8 +33,6 @@
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
 			<!-- TITLE -->
@@ -42,17 +41,11 @@
 			<TextBlock Grid.Column="2" Text=" Monitor" FontSize="72" FontFamily="Agency FB" VerticalAlignment="Center"/>
 
 			<!-- BLUETOOTH DEVICE SELECTION -->
-			<TextBlock Grid.Column="3" Text="Bluetooth device" FontSize="24" FontFamily="Agency FB" VerticalAlignment="Center"/>
-			<ComboBox Grid.Column="4" Margin="20,0,0,0" VerticalAlignment="Center"
-					  ItemsSource="{x:Bind ViewModel.BluetoothPairedDevices, Mode=OneWay}"
-					  SelectedItem="{x:Bind ViewModel.SelectedBluetoothDevice, Mode=TwoWay, Converter={StaticResource ObjectConverter}}">
-				<ComboBox.ItemTemplate>
-					<DataTemplate x:DataType="deviceEnum:DeviceInformation">
-						<TextBlock Text="{x:Bind Name}" FontFamily="Agency FB"/>
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
-			<Button Grid.Column="5" Content="Connect" Padding="12,4" Margin="20,0,40,0" Command="{x:Bind ViewModel.ConnectCommand}" FontFamily="Agency FB"/>
+			<Button Grid.Column="3" Content="Connect" Padding="12,4" Margin="20,0,40,0" IsEnabled="{x:Bind ViewModel.IsCopterConnected, Mode=OneWay, Converter={StaticResource BooleanNegationConverter}}" FontFamily="Agency FB" Click="Button_Click">
+				<Button.Flyout>
+					<MenuFlyout x:Name="ConnectionMenuFlyout"/>
+				</Button.Flyout>
+			</Button>
 		</Grid>
 
 		<!-- CONTENT -->
