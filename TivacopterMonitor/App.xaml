@@ -20,6 +20,7 @@
 			<converters:AddScaleConverter x:Key="OppositeConverter" Factor="-1" IsParameterOffset="true"/>
 			<converters:ObjectConverter x:Key="ObjectConverter"/>
 			<converters:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
+			<converters:StringFormatConverter x:Key="StringFormatConverter"/>
 			<!--#endregion-->
 
 			<!--#region APP COLORS -->
