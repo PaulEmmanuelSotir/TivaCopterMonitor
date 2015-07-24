@@ -70,25 +70,25 @@
 				<!-- ACCEL Y -->
 				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Y" Value="{x:Bind ViewModel.Sensors.ay, Mode=OneWay}" Unit="m/s²" MinValue="-20" MaxValue="20"/>
 				<!-- ACCEL Z -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Z" Value="{x:Bind ViewModel.Sensors.az, Mode=OneWay}" Unit="m/s²" MinValue="-20" MaxValue="20"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Z" Value="{x:Bind ViewModel.Sensors.az, Mode=OneWay}" Unit="m/s²" MinValue="-20" MaxValue="20"/>
 
 				<!-- GYROSCOPE -->
 				<TextBlock Text="GYROSCOPE" Margin="-20,0,0,0"/>
 				<!-- GYRO X -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="X" Value="{x:Bind ViewModel.Sensors.gx, Mode=OneWay}" Unit="deg/s" MinValue="-10" MaxValue="10"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="X" Value="{x:Bind ViewModel.Sensors.gx, Mode=OneWay}" Unit="deg/s" MinValue="-10" MaxValue="10"/>
 				<!-- GYRO Y -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Y" Value="{x:Bind ViewModel.Sensors.gy, Mode=OneWay}" Unit="deg/s" MinValue="-10" MaxValue="10"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Y" Value="{x:Bind ViewModel.Sensors.gy, Mode=OneWay}" Unit="deg/s" MinValue="-10" MaxValue="10"/>
 				<!-- GYRO Z -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Z" Value="{x:Bind ViewModel.Sensors.gz, Mode=OneWay}" Unit="deg/s" MinValue="-10" MaxValue="10"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Z" Value="{x:Bind ViewModel.Sensors.gz, Mode=OneWay}" Unit="deg/s" MinValue="-10" MaxValue="10"/>
 
 				<!-- MAGNETOMETER -->
 				<TextBlock Text="MAGNETOMETER" Margin="-20,0,0,0"/>
 				<!-- MAGNETO X -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="X" Value="{x:Bind ViewModel.Sensors.mx, Mode=OneWay}" Unit="μT" MinValue="-4" MaxValue="4"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="X" Value="{x:Bind ViewModel.Sensors.mx, Mode=OneWay}" Unit="μT" MinValue="-4" MaxValue="4"/>
 				<!-- MAGNETO Y -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Y" Value="{x:Bind ViewModel.Sensors.my, Mode=OneWay}" Unit="μT" MinValue="-4" MaxValue="4"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Y" Value="{x:Bind ViewModel.Sensors.my, Mode=OneWay}" Unit="μT" MinValue="-4" MaxValue="4"/>
 				<!-- MAGNETO Z -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Z" Value="{x:Bind ViewModel.Sensors.mz, Mode=OneWay}" Unit="μT" MinValue="-4" MaxValue="4"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Z" Value="{x:Bind ViewModel.Sensors.mz, Mode=OneWay}" Unit="μT" MinValue="-4" MaxValue="4"/>
 				<!--#endregion-->
 
 				<!--#region YAW SECTION-->
@@ -241,25 +241,25 @@
 				<!-- STABILIZATION PIDs -->
 				<TextBlock Text="STABILIZATION PIDs" Margin="-20,0,0,0"/>
 				<!-- YAW PID OUT -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Yaw PID" Value="{x:Bind ViewModel.PID.YawOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Yaw PID" Value="{x:Bind ViewModel.PID.YawOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
 				<!-- YAW PID OUT -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Roll PID" Value="{x:Bind ViewModel.PID.RollOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Roll PID" Value="{x:Bind ViewModel.PID.RollOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
 				<!-- YAW PID OUT -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Pitch PID" Value="{x:Bind ViewModel.PID.PitchOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Pitch PID" Value="{x:Bind ViewModel.PID.PitchOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
 				<!-- YAW PID OUT -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Altitude PID" Value="{x:Bind ViewModel.PID.AltitudeOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Altitude PID" Value="{x:Bind ViewModel.PID.AltitudeOut, Mode=OneWay}" MinValue="-2" MaxValue="2"/>
 				<!--#endregion-->
 
 				<!--#region MOTORS THROTTLE SECTION-->
 				<TextBlock Text="MOTORS THROTTLE" Margin="-20,20,0,0"/>
 				<!-- MOTOR 1 -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Motor 1" Value="{x:Bind ViewModel.PID.Motor1, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Motor 1" Value="{x:Bind ViewModel.PID.Motor1, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
 				<!-- MOTOR 2 -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Motor 2" Value="{x:Bind ViewModel.PID.Motor2, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Motor 2" Value="{x:Bind ViewModel.PID.Motor2, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
 				<!-- MOTOR 3 -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Motor 3" Value="{x:Bind ViewModel.PID.Motor3, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Motor 3" Value="{x:Bind ViewModel.PID.Motor3, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
 				<!-- MOTOR 4 -->
-				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}"  PropertyName="Motor 4" Value="{x:Bind ViewModel.PID.Motor4, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Motor 4" Value="{x:Bind ViewModel.PID.Motor4, Mode=OneWay, Converter={StaticResource PercentageConverter}}" Unit="%"/>
 				<!--#endregion-->
 
 				<!--#region BLUETOOTH CONTROLS SETTINGS SECTION -->
@@ -289,6 +289,23 @@
 					</ItemsControl>
 				</Grid>
 				<!--#endregion-->
+
+				<!--#region BLUETOOTH REMOTE CONTROL SECTION-->
+				<TextBlock Margin="-20,0,0,0" Text="BLUETOOTH REMOTE CONTROL"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Throttle" Value="{x:Bind ViewModel.RemoteCtrl.Throttle, Mode=OneWay}" MinValue="0" MaxValue="1"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Direction X" Value="{x:Bind ViewModel.RemoteCtrl.DirectionX, Mode=OneWay}" MinValue="-1" MaxValue="1"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Direction Y" Value="{x:Bind ViewModel.RemoteCtrl.DirectionY, Mode=OneWay}" MinValue="-1" MaxValue="1"/>
+				<view:NumericPropertyControl Style="{StaticResource FloatNumericControlStyle}" PropertyName="Yaw" Value="{x:Bind ViewModel.RemoteCtrl.Yaw, Mode=OneWay}" MinValue="-3.15" MaxValue="3.15"/>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Text="Beep"/>
+					<TextBlock Grid.Column="1" Text="ON" Visibility="{x:Bind ViewModel.RemoteCtrl.Beep, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" HorizontalAlignment="Center" Foreground="#FF247000" FontWeight="Medium"/>
+					<TextBlock Grid.Column="1" Text="OFF" Visibility="{x:Bind ViewModel.RemoteCtrl.Beep, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, FallbackValue=Visible}" HorizontalAlignment="Center" Foreground="#FF930000" FontWeight="Medium"/>
+				</Grid>
+				<!--#endregion-->
 			</StackPanel>
 		</Grid>
 
@@ -300,7 +317,7 @@
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<TextBlock FontSize="24.667" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="10,20,10,40"
-						   Text="Move or press your gamepad's joystick or button you want to map to this control."/>
+						 Text="Move or press your gamepad's joystick or button you want to map to this control."/>
 				<Button Grid.Row="1" Content="Cancel" Command="{x:Bind ViewModel.CancelControlsSettingPopupCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20"/>
 			</Grid>
 		</Popup>
