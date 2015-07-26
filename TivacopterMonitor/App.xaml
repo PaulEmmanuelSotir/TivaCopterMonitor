@@ -12,6 +12,11 @@
 			<!-- APP NAME -->
 			<x:String x:Key="AppName">Tivacopter monitor</x:String>
 
+			<!--#region APP COLORS -->
+			<SolidColorBrush x:Key="FalseRed" Color="#FF930000"/>
+			<SolidColorBrush x:Key="TrueGreen" Color="#FF247000"/>
+			<!--#endregion-->
+
 			<!--#region CONVERTERS -->
 			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 			<converters:AddScaleConverter x:Key="ScaleConverter" IsParameterOffset="false"/>
@@ -21,10 +26,7 @@
 			<converters:ObjectConverter x:Key="ObjectConverter"/>
 			<converters:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
 			<converters:StringFormatConverter x:Key="StringFormatConverter"/>
-			<!--#endregion-->
-
-			<!--#region APP COLORS -->
-			<!--...-->
+			<converters:BooleanToObjectConverter x:Key="BooleanToRedGreenColorConverter" TrueValue="{StaticResource TrueGreen}" FalseValue="{StaticResource FalseRed}"/>
 			<!--#endregion-->
 
 		</ResourceDictionary>

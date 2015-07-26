@@ -158,20 +158,20 @@
 					<TextBlock Text="RADIO INPUTS"/>
 
 					<StackPanel Grid.Row="1" Margin="00,0,0,0" Orientation="Horizontal">
-						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+						<Border Background="{x:Bind ViewModel.Radio.in0, Converter={StaticResource BooleanToRedGreenColorConverter}, FallbackValue={StaticResource FalseRed}, Mode=OneWay}" HorizontalAlignment="Left" Margin="0,0,10,0">
+							<TextBlock Grid.Row="1" Text="in 0" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
+						</Border>
+						<Border Background="{x:Bind ViewModel.Radio.in1, Converter={StaticResource BooleanToRedGreenColorConverter}, FallbackValue={StaticResource FalseRed}, Mode=OneWay}" HorizontalAlignment="Left" Margin="0,0,10,0">
 							<TextBlock Grid.Row="1" Text="in 1" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
 						</Border>
-						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+						<Border Background="{x:Bind ViewModel.Radio.in2, Converter={StaticResource BooleanToRedGreenColorConverter}, FallbackValue={StaticResource FalseRed}, Mode=OneWay}" HorizontalAlignment="Left" Margin="0,0,10,0">
 							<TextBlock Grid.Row="1" Text="in 2" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
 						</Border>
-						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+						<Border Background="{x:Bind ViewModel.Radio.in3, Converter={StaticResource BooleanToRedGreenColorConverter}, FallbackValue={StaticResource FalseRed}, Mode=OneWay}" HorizontalAlignment="Left" Margin="0,0,10,0">
 							<TextBlock Grid.Row="1" Text="in 3" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
 						</Border>
-						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
+						<Border Background="{x:Bind ViewModel.Radio.in4, Converter={StaticResource BooleanToRedGreenColorConverter}, FallbackValue={StaticResource FalseRed}, Mode=OneWay}" HorizontalAlignment="Left" Margin="0,0,10,0">
 							<TextBlock Grid.Row="1" Text="in 4" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
-						</Border>
-						<Border Background="#FF2F852F" HorizontalAlignment="Left" Margin="0,0,10,0">
-							<TextBlock Grid.Row="1" Text="in 5" FontFamily="Agency FB" RequestedTheme="Dark" Margin="10,0"/>
 						</Border>
 					</StackPanel>
 				</Grid>
