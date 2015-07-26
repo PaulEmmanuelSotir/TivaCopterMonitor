@@ -20,6 +20,26 @@
 	</Page.Resources>
 
 	<Grid>
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="VisualStateGroup">
+				<VisualState x:Name="Wide">
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="720"/>
+					</VisualState.StateTriggers>
+				</VisualState>
+				<VisualState x:Name="Narrow">
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="0"/>
+					</VisualState.StateTriggers>
+					<VisualState.Setters>
+						<Setter Target="CenterDataDisplayColumn.(Grid.ColumnSpan)" Value="3"/>
+						<Setter Target="CenterDataDisplayColumn.(Grid.Column)" Value="0"/>
+						<Setter Target="LeftDataDisplayColumn.(UIElement.Visibility)" Value="Collapsed"/>
+						<Setter Target="RightDataDisplayColumn.(UIElement.Visibility)" Value="Collapsed"/>
+					</VisualState.Setters>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
 		<Grid.Background>
 			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 				<GradientStop Color="White" Offset="{x:Bind ViewModel.IMU.PitchDegree, Mode=OneWay, Converter={StaticResource BackgroundHorizonConverter}, FallbackValue=0.5}"/>
@@ -61,7 +81,7 @@
 				<ColumnDefinition Width="1*"/>
 			</Grid.ColumnDefinitions>
 
-			<StackPanel Margin="20,0,0,0" Padding="20,0,0,0">
+			<StackPanel x:Name="LeftDataDisplayColumn" Margin="20,0,0,0" Padding="20,0,0,0">
 				<!--#region SENSORS SECTION -->
 				<!-- ACCELEROMETER -->
 				<TextBlock Text="ACCELEROMETER" Margin="-20,0,0,0"/>
@@ -179,12 +199,12 @@
 			</StackPanel>
 
 			<!--#region IMU SECTION -->
-			<Border Grid.Column="1">
+			<Border x:Name="CenterDataDisplayColumn" Grid.Column="1">
 
 			</Border>
 			<!--#endregion-->
 
-			<StackPanel Grid.Column="2" Margin="0,0,20,0" Padding="20,0,0,0">
+			<StackPanel x:Name="RightDataDisplayColumn" Grid.Column="2" Margin="0,0,20,0" Padding="20,0,0,0">
 				<!--#region 3D VIEW SECTION -->
 				<Grid>
 					<Grid.RowDefinitions>
